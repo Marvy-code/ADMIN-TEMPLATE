@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 
@@ -8,11 +9,13 @@ const Menu = () => {
             title: "MENU",
             items:[
                 {
-                    label: "Nouveau ODM",
-                    href: "/"
+                    icon: "/assets/images/objective.png",
+                    label: "Suivi des Missions",
+                    href: "/mission"
                 },
                 {
-                    label: "Liste des ODM",
+                    icon: "/assets/images/lines.png",
+                    label: "Suivi des ODM",
                     href: "/nouveau"
                 }
             ]
@@ -21,14 +24,17 @@ const Menu = () => {
             title: "AUTRES",
             items: [
                 {
+                    icon: "/assets/images/user.png",
                     label: "Profil",
                     href: "/profile"
                 },
                 {
+                    icon: "/assets/images/adjust.png",
                     label: "Configs",
                     href: "/settings"
                 },
                 {
+                    icon: "/assets/images/logout.png",
                     label: "Déconnexion",
                     href: "/logout"
                 }
@@ -44,7 +50,8 @@ const Menu = () => {
                     <span className='hidden lg:block text-gray-400 font-light my-4'>{i.title}</span>
                     {i.items.map(item=>(
                         <Link href={item.href} key={item.label} className='flex items-center justify-center lg:justify-start gap-4 text-gray-500 py-2'>
-                            <span>{item.label}</span>
+                            <Image src={item.icon} alt='' width={15} height={15} />
+                            <span className='hidden lg:block'>{item.label}</span>
                         </Link>
                     ))}
                 </div>

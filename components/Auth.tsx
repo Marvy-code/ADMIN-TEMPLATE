@@ -1,12 +1,36 @@
 import Image from 'next/image'
 import React from 'react'
-import Form from 'next/form'
-import style from './Auth.module.css'
 import Head from 'next/head'
 import { FaUser } from 'react-icons/fa'
 import { MdLockOutline } from 'react-icons/md'
 
+import { useState } from 'react';
+import { signIn } from 'next-auth/react';
+import { useRouter } from 'next/router'
+
 const Auth = () => {
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+    const router = useRouter();
+
+    const handleSubmit = async (e)=>{
+        e.preventDefault();
+        const result = await signIn('credentials', {
+            redirect: false,
+            username,
+            password,
+            callbackUrl: "/home"
+        })
+
+        if(result.error){
+            setError('Identifiants incorrects')
+        }
+        else{
+            router.push(result.url || '/home')
+        }
+    }
+
   return (
     <div className='flex flex-col items-center justify-center min-h-screen py-2 bg-green-50'>
         <Head>
@@ -28,21 +52,23 @@ const Auth = () => {
                         <h2 className='text-sm sm:text-3xl font-bold text-[#769C38] mb-2 mt-4'>DIGI ODM</h2>
                         <div className='border-2 w-10 border-[#769C38] inline-block mb-5'></div>
 
-                        <div className="flex flex-col items-center">
-                            <div className="bg-gray-100 w-64 p-2 flex items-center mb-3">
-                                <FaUser className='text-gray-400 mr-2'/> 
-                                <input type="text" name='username' placeholder='Ex: mmouanda' className='bg-gray-100 outline-none text-sm flex-1'/>
-                            </div>
+                        <form onSubmit={handleSubmit}>
+                            <div className="flex flex-col items-center">
+                                <div className="bg-gray-100 w-64 p-2 flex items-center mb-3">
+                                    <FaUser className='text-gray-400 mr-2'/> 
+                                    <input type="text" name='username' placeholder='Ex: mmouanda' className='bg-gray-100 outline-none text-sm flex-1' value={username} onChange={(e) => setUsername(e.target.value)}/>
+                                </div>
 
-                            <div className="bg-gray-100 w-64 p-2 flex items-center">
-                                <MdLockOutline className='text-gray-400 mr-2'/> 
-                                <input type="password" name='username' placeholder='Votre mot de passe ARPCE' className='bg-gray-100 outline-none text-sm flex-1'/>
-                            </div>
+                                <div className="bg-gray-100 w-64 p-2 flex items-center">
+                                    <MdLockOutline className='text-gray-400 mr-2'/> 
+                                    <input type="password" name='username' placeholder='Votre mot de passe ARPCE' className='bg-gray-100 outline-none text-sm flex-1' value={password} onChange={(e) => setPassword(e.target.value)}/>
+                                </div>
 
-                            <a href="#" className='border-2 border-[#769C38] mt-5 text-[#769C38] rounded-full px-12 py-2 inline-block font-semibold hover:bg-[#769C38] hover:text-white'>
-                                Se connecter
-                            </a>
-                        </div>
+                                <button type='submit' className='border-2 border-[#769C38] mt-5 text-[#769C38] rounded-full px-12 py-2 inline-block font-semibold hover:bg-[#769C38] hover:text-white'>
+                                    Se connecter
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
                 <div className='w-2/5 bg-gradient-to-r from-[#769C38] to-[#B2241B] text-white rounded-tr-2xl rounded-br-2xl py-36 px-12 hidden sm:block'>

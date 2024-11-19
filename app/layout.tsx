@@ -2,6 +2,7 @@ import Link from 'next/link';
 import '../styles/globals.css';
 import Image from 'next/image';
 import Menu from '@/components/Menu';
+import Nav from '@/components/Nav';
 
 export const metadata = {
   title: 'Next.js',
@@ -20,14 +21,17 @@ export default function RHLayout({
           {/* Left */}
           <div className="w-[14%] md:w-[8%] lg:w-[16%] xl:w-[14%] p-4">
             <Link href='/' className='flex items-center justify-center lg:justify-start gap-2'>
-              <Image src={'/assets/images/Logo_arpce.png'} alt='ARPCE' width={32} height={32} />
-              <span className='hidden lg:block'>DIGI ODM</span>
+              <Image src={'/assets/images/Logo_arpce.png'} alt='ARPCE' width={70} height={70} />
+              <span className='hidden lg:block text-[15px] font-bold text-[#769C38]'>DIGI ODM</span>
             </Link>
 
             <Menu/>
           </div>
-          {/* Rirh */}
-          <div className="w-[86%] md:w-[92%] lg:w-[84%] xl:w-[86%]">r</div>
+          {/* Right */}
+          <div className="w-[86%] md:w-[92%] lg:w-[84%] xl:w-[86%] bg-[#F7F8FA] overflow-scroll">
+            <Nav/>
+            {children}
+          </div>
         </div>
       </body>
     </html>
