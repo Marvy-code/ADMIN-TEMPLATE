@@ -10,7 +10,7 @@ export default {
     extend: {
       fontFamily: {
         logo:["Oleo Script", "system-ui"],
-        primary: ["Poppins", "sans-serif"]
+        primary: ["Inter", "sans-serif"]
       }
     },
   },

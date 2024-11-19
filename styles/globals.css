@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Oleo+Script:wght@400;700&family=Poppins:ital,wght@0,100;0,500;0,600;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -9,7 +9,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-   
+   /* font-family: ; */
 }
 
 .app-title{
@@ -126,6 +126,8 @@ section .contentBox .formBox{
       padding: 40px;
   }
 }
+
+
 
 .form > div{
   @apply flex flex-col gap-2

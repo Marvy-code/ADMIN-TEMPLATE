@@ -17,7 +17,7 @@ export default function RHLayout({
   return (
     <html lang="fr">
       <body>
-        <div className="h-screen flex">
+        <div className="h-screen flex font-primary">
           {/* Left */}
           <div className="w-[14%] md:w-[8%] lg:w-[16%] xl:w-[14%] p-4 shadow-inner">
             <Link href='/' className='flex items-center justify-center lg:justify-start gap-2'>
