@@ -1,5 +1,36 @@
+"use client"
 import React from 'react'
 import Jumbotron from '@/components/Jumbotron';
+
+import { data } from "@/components/FakeDatas";
+import DataTable from 'react-data-table-component';
+
+const columns = [
+    {
+        name: "Titre",
+        selector: row => row.title,
+        sortable: true
+    },
+    {
+        name: "Pays",
+        selector: row => row.country
+    },
+    {
+        name: "Action",
+        selector: row => row.action
+    }
+]
+
+const customStyles = {
+    headCells:{
+        style:{
+            backgroundColor: "#769C38",
+            color: "white",
+            fontSize: "17px",
+            fontWeight: "bolder"
+        }
+    }
+}
 
 const Liste = () => {
   return (
@@ -8,7 +39,16 @@ const Liste = () => {
 
         <div className='flex gap-4 flex-col md:flex-row p-2'>
             <div className="w-full lg:w-2/3 bg-white font-primary">
-                <p className='p-2 text-gray-500'>Ici sront affichées les différentes missions enregistrées</p>
+                {/* <p className='p-2 text-gray-500'>Ici sront affichées les différentes missions enregistrées</p> */}
+                <div>
+                    <h4 className='font-bold '>Total des missions: {data.length}</h4>
+                </div>
+                <DataTable 
+                    columns={columns} 
+                    data={data} 
+                    customStyles={customStyles}
+                    pagination
+                />
             </div>
 
             <div className="w-full lg:w-1/3 bg-white">
