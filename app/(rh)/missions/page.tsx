@@ -4,7 +4,7 @@ import Liste from './Liste';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Nouveau ODM',
+  title: 'GESTION DES MISSIONS',
   description: '...',
 }
 

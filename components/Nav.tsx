@@ -3,7 +3,7 @@ import React from 'react'
 
 const Nav = () => {
   return (
-    <div className='flex items-center justify-between p-4 bg-white'>
+    <div className='flex items-center justify-between p-4 bg-white shadow-inner'>
       {/* Search */}
       <div className='hidden md:flex'></div>
 
