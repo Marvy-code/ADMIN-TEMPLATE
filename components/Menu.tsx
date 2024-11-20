@@ -11,12 +11,12 @@ const Menu = () => {
                 {
                     icon: "/assets/images/objective.png",
                     label: "Suivi des Missions",
-                    href: "/mission"
+                    href: "/missions"
                 },
                 {
                     icon: "/assets/images/lines.png",
                     label: "Suivi des ODM",
-                    href: "/nouveau"
+                    href: "/odm"
                 }
             ]
         },

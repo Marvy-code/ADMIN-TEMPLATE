@@ -4,6 +4,8 @@ import Jumbotron from '@/components/Jumbotron';
 
 import { data } from "@/components/FakeDatas";
 import DataTable from 'react-data-table-component';
+import Swal from 'sweetalert2';
+import { redirect } from 'next/navigation';
 
 const columns = [
     {
@@ -32,16 +34,35 @@ const customStyles = {
     }
 }
 
+const handleSubmit = async (e) => {
+    e.preventDefault()
+    Swal.fire({
+        title: "Mission créée avec succès",
+        text: "Souhaitez-vous enregistrer un ODM pour cette mission ?",
+        icon: "info",
+        showCancelButton: true,
+        confirmButtonColor: "#769C38",
+        cancelButtonColor: "#B2241B",
+        confirmButtonText: "Oui, je veux",
+        cancelButtonText: "Plus tard",
+      }).then((result) => {
+        if (result.isConfirmed) {
+            redirect('/odm')
+        }
+      });
+}
+
 const Liste = () => {
   return (
     <div className='font-primary'>
         <Jumbotron icon='/assets/images/add-files.png' title='Gestion des Missions'/>
 
-        <div className='flex gap-4 flex-col md:flex-row p-2'>
+        <div className='flex gap-4 flex-col md:flex-row p-2 mt-5'>
             <div className="w-full lg:w-2/3 bg-white font-primary">
                 {/* <p className='p-2 text-gray-500'>Ici sront affichées les différentes missions enregistrées</p> */}
-                <div>
-                    <h4 className='font-bold '>Total des missions: {data.length}</h4>
+                <div className='flex flex-col md:flex-row p-2'>
+                    <h4 className='font-bold w-full lg:w-1/3'>Total des missions: {data.length}</h4>
+                    <input type="text" className='w-full lg:w-2/3 outline-none rounded-full' placeholder='Effectuez une recherche rapide des données ici'/>
                 </div>
                 <DataTable 
                     columns={columns} 
@@ -57,7 +78,7 @@ const Liste = () => {
                     <p className='text-gray-400'>Veuillez remplir ce formulaire pour ajouter une nouvelle mission</p>
                     
                     <div>
-                        <form className='form border-t flex flex-col gap-5 mt-4'>
+                        <form className='form border-t flex flex-col gap-5 mt-4' onSubmit={handleSubmit}>
                             <div className='mt-4'>
                                 <label htmlFor="objet" className='font-primary'>Objet de la mission</label>
                                 <input type="text" id='objet' placeholder='Objet de la mission' className='outline-none'/>
