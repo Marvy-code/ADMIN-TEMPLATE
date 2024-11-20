@@ -3,6 +3,7 @@ import '../styles/globals.css';
 import Image from 'next/image';
 import Menu from '@/components/Menu';
 import Nav from '@/components/Nav';
+import Footer from '@/components/Footer';
 
 export const metadata = {
   title: 'Next.js',
@@ -31,6 +32,8 @@ export default function RHLayout({
           <div className="w-[86%] md:w-[92%] lg:w-[84%] xl:w-[86%] bg-[#F7F8FA] overflow-scroll">
             <Nav/>
             {children}
+
+            {/* <Footer/> */}
           </div>
         </div>
       </body>
