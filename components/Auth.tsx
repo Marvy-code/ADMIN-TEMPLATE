@@ -7,6 +7,7 @@ import { MdLockOutline } from 'react-icons/md'
 import { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/router'
+import Link from 'next/link'
 
 const Auth = () => {
     const [username, setUsername] = useState('');
@@ -64,9 +65,9 @@ const Auth = () => {
                                     <input type="password" name='username' placeholder='Votre mot de passe ARPCE' className='bg-gray-100 outline-none text-sm flex-1' value={password} onChange={(e) => setPassword(e.target.value)}/>
                                 </div>
 
-                                <button type='submit' className='border-2 border-[#769C38] mt-5 text-[#769C38] rounded-full px-12 py-2 inline-block font-semibold hover:bg-[#769C38] hover:text-white'>
+                                <Link href={'/missions'} className='border-2 border-[#769C38] mt-5 text-[#769C38] rounded-full px-12 py-2 inline-block font-semibold hover:bg-[#769C38] hover:text-white'>
                                     Se connecter
-                                </button>
+                                </Link>
                             </div>
                         </form>
                     </div>

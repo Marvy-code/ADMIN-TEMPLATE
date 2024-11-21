@@ -1,10 +1,11 @@
 import React from 'react'
 import Jumbotron from '@/components/Jumbotron';
 import { BiSolidObjectsVerticalTop } from 'react-icons/bi';
-import { MdAccountBalance, MdOutlineAccountBalance, MdOutlineDescription } from 'react-icons/md';
+import { MdAccountBalance, MdNavigateNext, MdOutlineAccountBalance, MdOutlineDescription } from 'react-icons/md';
 import { TbEyeSearch, TbFlagDiscount } from 'react-icons/tb';
 import Link from 'next/link';
 import Image from 'next/image';
+import NewOdm from "./NewOdm"
 
 const SingleOdm = () => {
   return (
@@ -14,38 +15,7 @@ const SingleOdm = () => {
         <div className='flex flex-col gap-4 md:flex-row p-2 mt-5'>
             <div className='w-full lg:w-1.5/3 bg-white'>
                 <div className='p-4'>
-                    <form className='form flex flex-col'>
-                        <h3 className='text-gray-500'>Formulaire d'enregistrement d'un ODM</h3>
-                        
-                        <div className='mt-4 bg-slate-600 p-2'>
-                            <h3 className='text-white'>Etape 1: Identification du participant</h3>
-                        </div>
-
-                        <div className='mt-4'>
-                            <label htmlFor="participant">Nom et prénoms du participant</label>
-                            <input type="text" id='participant' className='outline-none' autoFocus placeholder=''/>
-                        </div>
-
-                        <div className=''>
-                            <label htmlFor="">Direction du participant</label>
-                            <input type="text" id='participant' className='outline-none' placeholder='Ex: DAFC'/>
-                        </div>
-
-                        <div className=''>
-                            <label htmlFor="">Service du participant</label>
-                            <input type="text" id='participant' className='outline-none' placeholder='Ex: Service Ressources Humaines et Documentation'/>
-                        </div>
-
-                        <div className='md:flex-row w-full lg:w-1.5/3'>
-                            <label htmlFor="">Bureau du participant</label>
-                            <input type="text" id='participant' className='outline-none' placeholder='Ex: Bureau Administration et Paie'/>
-                        </div>
-
-                        <div className='md:flex-row w-full lg:w-1.5/3'>
-                            <label htmlFor="">Fonction du participant</label>
-                            <input type="text" id='participant' className='outline-none' placeholder='Ex: Assistante administrative'/>
-                        </div>
-                    </form>
+                    <NewOdm showstepNumber={true} />
                 </div>
             </div>
 
@@ -88,9 +58,7 @@ const SingleOdm = () => {
                         <p className='font-bold'>2 ODM ont été retrouvés pour cette mission <span className='float-end text-blue-700 flex'><Link href={'#'}>Consulter les ODM</Link></span></p>
                     </div>
 
-                    <div>
-                        <Image />
-                    </div>
+                    <div className='bg-gradient-to-r  from-[#B2241B] to-[#769C38] p-1'></div>
                 </div>
             </div>
         </div>
