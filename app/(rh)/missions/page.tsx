@@ -1,5 +1,5 @@
 import React from 'react';
-import Liste from './Liste';
+import Liste from './ListMissions';
 
 import { Metadata } from 'next';
 

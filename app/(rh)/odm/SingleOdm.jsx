@@ -5,7 +5,7 @@ import { MdAccountBalance, MdNavigateNext, MdOutlineAccountBalance, MdOutlineDes
 import { TbEyeSearch, TbFlagDiscount } from 'react-icons/tb';
 import Link from 'next/link';
 import Image from 'next/image';
-import NewOdm from "./NewOdm"
+import NewOdm from "./CreateOdm"
 
 const SingleOdm = () => {
   return (

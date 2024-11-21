@@ -3,7 +3,7 @@ import React from 'react'
 
 const Nav = () => {
   return (
-    <div className='flex items-center justify-between p-4 bg-white shadow-inner'>
+    <div className='flex items-center justify-between p-3 bg-[#769C38] shadow-inner'>
       {/* Search */}
       <div className='hidden md:flex'></div>
 
@@ -19,8 +19,8 @@ const Nav = () => {
         </div>
 
         <div className="flex flex-col">
-          <span className='text-xs leading-3 font-medium'>Marvy MOUANDA</span>
-          <span className='text-[12px] text-gray-500 text-right'>Admin</span>
+          <span className='text-xs leading-3 text-white font-semibold font-medium'>Marvy MOUANDA</span>
+          <span className='text-[12px] text-white text-right'>Admin</span>
         </div>
 
         <Image src={'/assets/images/user.png'} alt='' width={25} height={25} className='rounded-full'/>
