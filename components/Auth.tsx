@@ -15,22 +15,22 @@ const Auth = () => {
     const [error, setError] = useState('');
     const router = useRouter();
 
-    const handleSubmit = async (e)=>{
-        e.preventDefault();
-        const result = await signIn('credentials', {
-            redirect: false,
-            username,
-            password,
-            callbackUrl: "/home"
-        })
+    // const handleSubmit = async (e:any)=>{
+    //     e.preventDefault();
+    //     const result = await signIn('credentials', {
+    //         redirect: false,
+    //         username,
+    //         password,
+    //         callbackUrl: "/home"
+    //     })
 
-        if(result.error){
-            setError('Identifiants incorrects')
-        }
-        else{
-            router.push(result.url || '/home')
-        }
-    }
+    //     if(result.error){
+    //         setError('Identifiants incorrects')
+    //     }
+    //     else{
+    //         router.push(result.url || '/home')
+    //     }
+    // }
 
   return (
     <div className='flex flex-col items-center justify-center min-h-screen py-2 bg-green-50'>
@@ -53,7 +53,7 @@ const Auth = () => {
                         <h2 className='text-sm sm:text-3xl font-bold text-[#769C38] mb-2 mt-4'>DIGI ODM</h2>
                         <div className='border-2 w-10 border-[#769C38] inline-block mb-5'></div>
 
-                        <form onSubmit={handleSubmit}>
+                        <form>
                             <div className="flex flex-col items-center">
                                 <div className="bg-gray-100 w-64 p-2 flex items-center mb-3">
                                     <FaUser className='text-gray-400 mr-2'/> 

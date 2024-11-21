@@ -1,5 +1,5 @@
 import React from 'react'
-import SingleOdm from "./SingleOdm"
+import ListOdm from "./ListOdm"
 
 import { Metadata } from 'next';
 
@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 const page = () => {
   return (
     <div className='p-2'>
-      <SingleOdm />
+      <ListOdm />
     </div>
     
   )

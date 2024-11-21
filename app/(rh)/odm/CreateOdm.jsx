@@ -23,7 +23,7 @@ const initialFormData = {
     joursHebergement: "",
 }
 
-const NewOdm = ({showStepNumber}) => {
+const NewOdm = () => {
 
     const [formStep, setFormStep] = useState(0)
     const completeFormStep = () =>{

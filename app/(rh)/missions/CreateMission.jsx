@@ -1,4 +1,7 @@
 import React from 'react'
+import { redirect } from 'next/navigation';
+import Swal from 'sweetalert2';
+import { useRouter } from 'next/router';
 
 const handleSubmit = async (e) => {
     e.preventDefault()
@@ -13,7 +16,7 @@ const handleSubmit = async (e) => {
         cancelButtonText: "Plus tard",
       }).then((result) => {
         if (result.isConfirmed) {
-            redirect('/odm')
+            redirect('/odm/single-odm/')
         }
       });
 }

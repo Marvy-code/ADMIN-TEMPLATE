@@ -5,7 +5,7 @@ import { MdAccountBalance, MdNavigateNext, MdOutlineAccountBalance, MdOutlineDes
 import { TbEyeSearch, TbFlagDiscount } from 'react-icons/tb';
 import Link from 'next/link';
 import Image from 'next/image';
-import NewOdm from "./CreateOdm"
+import NewOdm from "../CreateOdm"
 
 const SingleOdm = () => {
   return (
@@ -15,7 +15,7 @@ const SingleOdm = () => {
         <div className='flex flex-col gap-4 md:flex-row p-2 mt-5'>
             <div className='w-full lg:w-1.5/3 bg-white'>
                 <div className='p-4'>
-                    <NewOdm showstepNumber={true} />
+                    <NewOdm />
                 </div>
             </div>
 
