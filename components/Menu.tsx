@@ -32,11 +32,6 @@ const Menu = () => {
                     icon: "/assets/images/adjust.png",
                     label: "Configs",
                     href: "/settings"
-                },
-                {
-                    icon: "/assets/images/logout.png",
-                    label: "Déconnexion",
-                    href: "/logout"
                 }
             ]
         }

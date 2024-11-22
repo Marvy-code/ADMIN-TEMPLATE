@@ -42,8 +42,6 @@ const customStyles = {
 }
 const Liste = () => {
     const { user } = useUser();
-
-    console.log(user, 'user')
   return (
     <ProtectedRoute>
         <div className='font-primary'>
