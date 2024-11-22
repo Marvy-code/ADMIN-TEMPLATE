@@ -1,4 +1,6 @@
 "use client"
+import withAuth from '../../../utils/WithAuth';
+
 import React from 'react'
 import Jumbotron from '@/components/Jumbotron';
 import CreateMission from "./CreateMission"
@@ -43,7 +45,6 @@ const Liste = () => {
 
         <div className='flex gap-4 flex-col md:flex-row p-2 mt-5'>
             <div className="w-full lg:w-2/3 bg-white font-primary">
-                {/* <p className='p-2 text-gray-500'>Ici sront affichées les différentes missions enregistrées</p> */}
                 <div className='flex flex-col md:flex-row p-2'>
                     <h4 className='font-bold w-full lg:w-1/3'>Total des missions: {data.length}</h4>
                     <input type="text" className='w-full lg:w-2/3 outline-none rounded-full text-input' placeholder='Effectuez une recherche rapide des données ici...'/>
@@ -61,4 +62,4 @@ const Liste = () => {
   )
 }
 
-export default Liste
+export default withAuth(Liste)
