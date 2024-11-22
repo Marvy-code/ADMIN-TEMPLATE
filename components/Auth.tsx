@@ -7,12 +7,11 @@ import { MdLockOutline } from 'react-icons/md'
 
 import { useState } from 'react';
 import { useRouter } from 'next/router'
-import Link from 'next/link'
 
 const Auth = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [applicode, setAppliCode] = useState('EVENTMANAG')
+    const [applicode, setAppliCode] = useState('DIGIODM')
 
 
     const [error, setError] = useState('');
@@ -20,7 +19,9 @@ const Auth = () => {
 
     const handleAuht = async (e:any) =>{
         e.preventDefault()
+        setError("");
 
+        try{
         const response = await fetch('https://bzv-test-appli:8000/api/home/signin', {
             method: 'POST',
             headers: {
@@ -28,10 +29,20 @@ const Auth = () => {
             },
             body:JSON.stringify({ Username:username, Password:password, Code_appli:applicode })
         })
+        if (!response.ok) {
+            if (response.status === 401) {
+              // Identifiants incorrects
+              setError("Identifiants incorrects. Veuillez réessayer.");
+            } else {
+              // Autres erreurs
+              setError(`Nom d\'utilisateur ou mot de passe incorrect`);
+            }
+            return;
+        }
 
         if(response.ok){
             const data = await response.json();
-           // Sauvegarder le token dans localStorage ou cookies
+            // Sauvegarder le token dans localStorage ou cookies
             localStorage.setItem('token', data.token);
             // Rediriger vers une page protégée
             router.push('/missions');
@@ -39,7 +50,10 @@ const Auth = () => {
         }
         else{
             setError('Nom d\'utilisateur ou mot de passe incorrect');
+        }}catch(err){
+            setError("Une erreur est survenue. Veuillez vérifier vos identifiants et réessayer.");
         }
+    
     }
 
   return (

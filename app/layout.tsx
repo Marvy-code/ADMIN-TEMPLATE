@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Menu from '@/components/Menu';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
+import { UserProvider } from './context/UserContext'; // Importer le contexte
 
 export const metadata = {
   title: 'DIGI-ODM | ARPCE',
@@ -18,6 +19,7 @@ export default function RHLayout({
   return (
     <html lang="fr">
       <body>
+      <UserProvider>
         <div className="h-screen flex font-primary">
           {/* Left */}
           <div className="w-[14%] md:w-[8%] lg:w-[16%] xl:w-[14%] p-4 shadow-inner bg-gray-200">
@@ -36,6 +38,7 @@ export default function RHLayout({
             {/* <Footer/> */}
           </div>
         </div>
+        </UserProvider>
       </body>
     </html>
   )

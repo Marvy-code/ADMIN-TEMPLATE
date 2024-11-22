@@ -1,7 +1,11 @@
+'use client'
 import Image from 'next/image'
 import React from 'react'
 
+import { useUser } from '../app/context/UserContext';
+
 const Nav = () => {
+  const { user } = useUser();
   return (
     <div className='flex items-center justify-between p-3 bg-[#769C38] shadow-inner'>
       {/* Search */}
@@ -19,8 +23,8 @@ const Nav = () => {
         </div>
 
         <div className="flex flex-col">
-          <span className='text-xs leading-3 text-white font-semibold font-medium'>Marvy MOUANDA</span>
-          <span className='text-[12px] text-white text-right'>Admin</span>
+          <span className='text-xs leading-3 text-white font-semibold font-medium'><span>{user?.Prenom}</span> <span className='uppercase'>{user?.Nom}</span></span>
+          <span className='text-[12px] text-white text-right'>{user?.Email}</span>
         </div>
 
         <Image src={'/assets/images/user.png'} alt='' width={25} height={25} className='rounded-full'/>
