@@ -4,28 +4,11 @@ import { useForm } from 'react-hook-form'
 import Swal from 'sweetalert2';
 import axiosInstance from '../../../utils/axios';
 import { useUser } from '../../context/UserContext';
-
-// const handleSubmit = async (e) => {
-//     e.preventDefault()
-//     // Swal.fire({
-//     //     title: "Mission créée avec succès",
-//     //     text: "Souhaitez-vous enregistrer un ODM pour cette mission ?",
-//     //     icon: "info",
-//     //     showCancelButton: true,
-//     //     confirmButtonColor: "#769C38",
-//     //     cancelButtonColor: "#B2241B",
-//     //     confirmButtonText: "Oui, je veux",
-//     //     cancelButtonText: "Plus tard",
-//     //   }).then((result) => {
-//     //     if (result.isConfirmed) {
-//     //         redirect('/odm/single-odm/')
-//     //     }
-//     //   });
-// }
-
+import Loader from '../../../components/Loader'
 
 const CreateMission = () => {
     const { user } = useUser();
+    const [loader, setLoader] = useState(false)
     const {
         register, // Pour enregistrer les champs
         handleSubmit, // Pour gérer la soumission
@@ -34,7 +17,7 @@ const CreateMission = () => {
       } = useForm();
     
     const onSubmit = async (data) => {
-        // console.log(data.ville);
+        setLoader(true)
         try{
             await axiosInstance.post('mission/create', {
                 Objet_mission: data.objet,
@@ -68,7 +51,7 @@ const CreateMission = () => {
                         reset();
                     }
                 });
-                console.log(res.data)
+                setLoader(false)
             })
             .catch(()=>{
                 Swal.fire({
@@ -76,6 +59,7 @@ const CreateMission = () => {
                     title: "Oops...",
                     text: "Une erreur svp, l'objet de cette mission existe déjà"
                 });
+                setLoader(false)
             })
         }catch(err){
             Swal.fire({
@@ -83,6 +67,7 @@ const CreateMission = () => {
                 title: "Oops...",
                 text: "Une erreur liée au réseau s'est produite. Nous vous prions de réessayer svp"
             });
+            setLoader(false)
         }
     }
     return (
@@ -131,7 +116,11 @@ const CreateMission = () => {
                             {errors.ville && (<p className="text-red-500 text-sm">{errors.ville.message}</p>)}
                         </div>
 
-                        <button className='bg-[#769C38] p-2 text-white font-bold rounded-2xl hover:bg-green-900' type='submit'>Enregistrer</button>
+                        {!loader && <button className='bg-[#769C38] p-2 text-white font-bold rounded-2xl hover:bg-green-900' type='submit'>Enregistrer</button>}
+
+                        <div className='justify-center'>
+                            {loader && <Loader />}
+                        </div>
                     </form>
                 </div>
             </div>
