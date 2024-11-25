@@ -13,11 +13,14 @@ const Auth = () => {
     const [password, setPassword] = useState('');
     const [applicode, setAppliCode] = useState('DIGIODM')
 
+    const [loader, setLoader] = useState(false)
+
 
     const [error, setError] = useState('');
     const router = useRouter();
 
     const handleAuht = async (e:any) =>{
+        setLoader(true)
         e.preventDefault()
         setError("");
 
@@ -33,9 +36,11 @@ const Auth = () => {
             if (response.status === 401) {
               // Identifiants incorrects
               setError("Identifiants incorrects. Veuillez réessayer.");
+              setLoader(false)
             } else {
               // Autres erreurs
               setError(`Nom d\'utilisateur ou mot de passe incorrect`);
+              setLoader(false)
             }
             return;
         }
@@ -45,13 +50,14 @@ const Auth = () => {
             // Sauvegarder le token dans localStorage ou cookies
             localStorage.setItem('token', data.token);
             // Rediriger vers une page protégée
-            router.push('/missions');
-            
+            router.push('/missions');     
         }
         else{
             setError('Nom d\'utilisateur ou mot de passe incorrect');
+            setLoader(false)
         }}catch(err){
-            setError("Une erreur est survenue. Veuillez vérifier vos identifiants et réessayer.");
+            setError("Une erreur réseau est survenue. Veuillez vérifier vos identifiants et réessayer. Si l'erreur persiste, contactez le support IT au 1123");
+            setLoader(false)
         }
     
     }
@@ -89,9 +95,14 @@ const Auth = () => {
                                     <input type="password" name='username' placeholder='Votre mot de passe ARPCE' className='bg-gray-100 outline-none text-sm flex-1' value={password} onChange={(e) => setPassword(e.target.value)} required/>
                                 </div>
 
-                                <button type='submit' className='border-2 border-[#769C38] mt-5 text-[#769C38] rounded-full px-12 py-2 inline-block font-semibold hover:bg-[#769C38] hover:text-white'>
+                                {!loader && (<button type='submit' className='border-2 border-[#769C38] mt-5 text-[#769C38] rounded-full px-12 py-2 inline-block font-semibold hover:bg-[#769C38] hover:text-white'>
                                     Se connecter
-                                </button>
+                                </button>)}
+
+                                {loader && (<span className="relative flex h-5 w-5 mt-5">
+                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
+                                    <span className="relative inline-flex rounded-full h-5 w-5 bg-sky-500"></span>
+                                </span>)}
 
                                 {error && <p className='mt-3 text-red-800 font-semibold'>{error}</p>}
                             </div>
@@ -102,9 +113,12 @@ const Auth = () => {
                     <h2 className='text-3xl font-bold mb-2'>Bienvenu,</h2>
                     <div className='border-2 w-10 border-white inline-block m-2'></div>
                     <p className='mb-2 text-[18px]'>
-                        <span className='font-bold'>DIGI ODM App</span> est une application de Gestion des Ordres de Missions à l'ARPCE. <br />
-                        <span className=''>Digitaliser pour mieux Gérer</span>
+                        <span className='font-bold'>DIGI ODM App</span> est une application de Gestion des Ordres de Missions à l'ARPCE. 
                     </p>
+
+                    <div className="relative h-32  ...">
+                        <div className="absolute inset-x-0 bottom-0 h-16 font-bold uppercase">Digitaliser pour mieux Gérer</div>
+                    </div>
                 </div>
             </div>
         </main>

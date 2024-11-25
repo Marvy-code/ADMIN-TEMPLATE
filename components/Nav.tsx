@@ -1,17 +1,17 @@
 'use client'
-// import { useRouter } from 'next/navigation';
 import Image from 'next/image'
 import React from 'react'
 
-import { useUser } from '../app/context/UserContext';
-// const router = useRouter();
+import { redirect } from 'next/navigation';
 
-// const Logout = () => {
-//   // Supprimer le token ou les informations d'authentification
-//   localStorage.removeItem('token');
-//   // Rediriger vers la page de connexion après la déconnexion
-//   router.push('/login');
-// };
+import { useUser } from '../app/context/UserContext';
+
+const Logout = () => {
+  // Supprimer le token ou les informations d'authentification
+  localStorage.removeItem('token');
+  // Rediriger vers la page de connexion après la déconnexion
+  redirect('/');
+};
 
 const Nav = () => {
   const { user } = useUser();
@@ -19,7 +19,7 @@ const Nav = () => {
     <div className='flex items-center justify-between p-3 bg-[#769C38] shadow-inner'>
       {/* Search */}
       <div className='flex items-center'>
-        <button className='bg-gradient-to-b from-[#B2241B] to-[#769C38] p-1 text-white rounded-xl w-35 flex items-center'>
+        <button className='bg-gradient-to-b from-[#B2241B] to-[#769C38] p-1 text-white rounded-xl w-35 flex items-center' type='button' onClick={Logout}>
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
             <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
           </svg>
