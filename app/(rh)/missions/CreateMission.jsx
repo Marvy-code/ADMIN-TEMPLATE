@@ -29,6 +29,7 @@ const CreateMission = () => {
     const {
         register, // Pour enregistrer les champs
         handleSubmit, // Pour gérer la soumission
+        reset, 
         formState: { errors, isSubmitting }, // Pour gérer les erreurs et l'état d'envoi
       } = useForm();
     
@@ -43,7 +44,7 @@ const CreateMission = () => {
                 Continent_mission: data.continent,
                 Cree_par: user?.Id_User
             })
-            .then(()=>{
+            .then((res)=>{
                 Swal.fire({
                     title: "Mission créée avec succès",
                     text: "Souhaitez-vous enregistrer un ODM pour cette mission ?",
@@ -56,14 +57,24 @@ const CreateMission = () => {
                     }).then((result) => {
                     if (result.isConfirmed) {
                         redirect('/odm/single-odm/')
+                    }else{
+                        Swal.fire({
+                            position: "top-end",
+                            icon: "success",
+                            title: "Mission créée avec succès",
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                        reset();
                     }
                 });
+                console.log(res.data)
             })
             .catch(()=>{
                 Swal.fire({
                     icon: "error",
                     title: "Oops...",
-                    text: "Une erreur s'est produite, réessayez svp"
+                    text: "Une erreur svp, l'objet de cette mission existe déjà"
                 });
             })
         }catch(err){
@@ -96,7 +107,15 @@ const CreateMission = () => {
 
                         <div className=''>
                             <label htmlFor="continent">Continent de la mission *</label>
-                            <input type="text" id='continent' {...register("continent", { required: "Le continent où se tiendra la mission est obligatoire" })} placeholder='Objet de la mission' className='outline-none text-input rounded-2xl' />
+                            <select name="" className='outline-none text-input rounded-2xl' {...register("continent", { required: "Le continent où se tiendra la mission est obligatoire" })}>
+                                <option value="">------</option>
+                                <option value="Afrique">Afrique</option>
+                                <option value="Asie">Asie</option>
+                                <option value="Europe">Europe</option>
+                                <option value="Amérique">Amérique</option>
+                                <option value="Océanie">Océanie</option>
+                            </select>
+                            {/* <input type="text" id='continent' {...register("continent", { required: "Le continent où se tiendra la mission est obligatoire" })} placeholder='Objet de la mission' className='outline-none text-input rounded-2xl' /> */}
                             {errors.continent && (<p className="text-red-500 text-sm">{errors.continent.message}</p>)}
                         </div>
 
