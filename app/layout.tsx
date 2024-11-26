@@ -35,7 +35,7 @@ export default function RHLayout({
             <Nav/>
             {children}
 
-            {/* <Footer/> */}
+            <Footer/>
           </div>
         </div>
         </UserProvider>
