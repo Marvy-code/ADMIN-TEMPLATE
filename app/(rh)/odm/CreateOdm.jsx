@@ -1,12 +1,28 @@
 'use client'
 import React, { useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import axiosInstance from '../../../utils/axios'
 import { useUser } from '../../context/UserContext'
 import Swal from 'sweetalert2';
 import Loader from '../../../components/Loader'
+import Select from "react-select";
 
 const NewOdm = () => {
+    const { user } = useUser();
+
+    const [idCurrentUser, setIdCurrentuser] = useState()
+    const [fonctionCurrentUser, setFonctionCurrentuser] = useState()
+
+    let userIdData  = null
+    let userFonctionData = null
+    axiosInstance.get(`poste/getbymatricule/${user?.Num_Matricule}`)
+    .then(res=>{
+        userIdData = res.data[0].Id_agent
+        setIdCurrentuser(userIdData)
+
+        userFonctionData = res.data[0].fonction
+        setFonctionCurrentuser(userFonctionData)
+    })
 
     const [formStep, setFormStep] = useState(0)
 
@@ -15,15 +31,15 @@ const NewOdm = () => {
     const completeFormStep = () =>{
         setFormStep(cur => cur + 1)
     }
-
-    const { user } = useUser();
+    
     const [loader, setLoader] = useState(false)
     const {
         register, // Pour enregistrer les champs
         handleSubmit, // Pour gérer la soumission
+        control,
         reset, 
         formState: { errors, isSubmitting }, // Pour gérer les erreurs et l'état d'envoi
-      } = useForm();
+    } = useForm();
 
 
     const renderButton = () =>{
@@ -48,49 +64,58 @@ const NewOdm = () => {
 
     const onSubmit = async (data) => {
         setLoader(true)
-        axiosInstance.post("ordremission/create", {
-            Id_mission: 1,
-            Id_budget: 2,
-            Id_agent_demandeur: 1002,
-            Id_agent_participant: 1002,
-            Id_poste_validateur: 1002,
-            Objectif_specifique_ODM: data.objet,
-            Date_depart:data.depart,
-            Date_retour: data.retour,
-            Moyen_transport: data.transport,
-            Nature_prise_en_charge: data.priseencharge,
-            Frais_mission: data.fraismission,
-            Frais_hebergement: data.fraishebergement,
-            Forfait: data.forfait,
-            Nbre_jour_mission: data.joursmission,
-            Nbre_jour_hebergement: data.jourshebergement,
-            Fonction_agent_participant: data.fonctionparticipant,
-            Direction_agent_participant: data.direction,
-            Service_agent_participant: data.service,
-            Bureau_agent_participant: data.bureau,
-            Fonction_agent_demandeur: data.fonctiondemandeur,
-            Statut_ODM: "Validé",
-            Cree_par: user?.Id_User
-        })
-        .then(()=>{
-            Swal.fire({
-                position: "top-end",
-                icon: "success",
-                title: "ODM créé avec succès",
-                showConfirmButton: false,
-                timer: 1500
-            });
-            reset();
-            setLoader(false)
-        })
-        .catch(()=>{
+        try{
+            axiosInstance.post("ordremission/create", {
+                Id_mission: 1,
+                Id_budget: 2,
+                Id_agent_demandeur: idCurrentUser,
+                Id_agent_participant: selectedOption.value,
+                Id_poste_validateur: 44, //A changer
+                Objectif_specifique_ODM: data.objet,
+                Date_depart:data.depart,
+                Date_retour: data.retour,
+                Moyen_transport: data.transport,
+                Nature_prise_en_charge: data.priseencharge,
+                Frais_mission: data.fraismission,
+                Frais_hebergement: data.fraishebergement,
+                Forfait: data.forfait,
+                Nbre_jour_mission: data.joursmission,
+                Nbre_jour_hebergement: data.jourshebergement,
+                Fonction_agent_participant: data.fonctionparticipant,
+                Direction_agent_participant: data.direction,
+                Service_agent_participant: data.service,
+                Bureau_agent_participant: data.bureau,
+                Fonction_agent_demandeur: fonctionCurrentUser,
+                Statut_ODM: "Validé",
+                Cree_par: idCurrentUser
+            })
+            .then(()=>{
+                Swal.fire({
+                    position: "top-end",
+                    icon: "success",
+                    title: "ODM créé avec succès",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+                reset();
+                setLoader(false)
+            })
+            .catch(()=>{
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Impossible de créer cet ODM car cet agent a déjà un ODM pour cette même mission"
+                });
+                setLoader(false)
+            })
+        }
+        catch(err){
             Swal.fire({
                 icon: "error",
                 title: "Oops...",
-                text: "Une erreur svp, veuillez réessayer"
+                text: "Veuillez vérifier les champs. Tous les champs sont obligatoires"
             });
-            setLoader(false)
-        })
+        }
     }
 
     const handleAction = () => {
@@ -164,7 +189,8 @@ const NewOdm = () => {
         }
         setYearArray(newArray);
 
-        getBudgetDatas()
+        getBudgetDatas()    
+        getAgentsARPCE();
     }, []);
 
     const [bugetList, setbudgetList] = useState([])
@@ -173,9 +199,28 @@ const NewOdm = () => {
         axiosInstance.get("budget/GetAll")
         .then(res=>{
             setbudgetList(res.data)
-            console.log(res.data)
+            // console.log(res.data)
         })
     }
+
+    const [agentsARPCE, setAgentsARPCE] = useState([]);
+    const [selectedOption, setSelectedOption] = useState(null);
+    
+    const getAgentsARPCE = () => {
+        axiosInstance.get("https://bzv-test-appli:9001/api/agent/getagent")
+        .then(res=>{
+            setAgentsARPCE(Array.isArray(res.data) ? res.data : []);
+        })
+    }
+
+    const options = agentsARPCE.map((user) => ({
+        value: user.Id_agent,
+        label: user.Nom_prenom,
+    }));
+
+    const handleChange = (selectedOption) => {
+        setSelectedOption(selectedOption);
+    };
 
   return (
     <div className=''>
@@ -192,13 +237,13 @@ const NewOdm = () => {
                         </button>
                     )}
 
-                    <span>Etape {formStep + 1}: {formStep === 0 ? "Identification du demandeur" : formStep === 1 ? "Identification du participant" : "A propos de l'ODM"} </span>
+                    <span>Etape {formStep + 1}: {formStep === 0 ? "Directeur validateur" : formStep === 1 ? "Identification du participant" : "A propos de l'ODM"} </span>
                 </h3>
             </div>
 
             {formStep === 0 && (
                 <div>
-                    <div className='mt-4'>
+                    {/* <div className='mt-4'>
                         <label htmlFor="agentdemandeur">Agent demandeur</label>
                         <input type="text" id='agentdemandeur' {...register("agentdemandeur", { required: "Ce champs est obligatoire" })} className='outline-none rounded-2xl text-input w-full' autoFocus placeholder=''/>
                         {errors.agentdemandeur && (<p className="text-red-500 text-sm">{errors.agentdemandeur.message}</p>)}
@@ -208,11 +253,11 @@ const NewOdm = () => {
                         <label htmlFor="fonctiondemandeur">Fonction du demandeur</label>
                         <input type="text" id='fonctiondemandeur' {...register("fonctiondemandeur", { required: "Ce champs est obligatoire" })} className='outline-none rounded-2xl text-input w-full' placeholder=''/>
                         {errors.fonctiondemandeur && (<p className="text-red-500 text-sm">{errors.fonctiondemandeur.message}</p>)}
-                    </div>
+                    </div> */}
 
                     <div className='mt-4'>
                         <label htmlFor="participant">Validateur</label>
-                        <select {...register("validateur", { required: "Ce champs est obligatoire" })} id="participant" className='outline-none rounded-2xl text-input w-full'>
+                        <select {...register("validateur", { required: "Ce champs est obligatoire" })} required id="participant" className='outline-none rounded-2xl text-input w-full'>
                             <option>---Veuillez sélectionner une valeur---</option>
                             <option value="DG">DG</option>
                             <option value="DEM">DEM</option>
@@ -233,31 +278,46 @@ const NewOdm = () => {
                 <div>
                     <div className='mt-4'>
                         <label htmlFor="participant">Nom et prénoms du participant</label>
-                        <input type="text" id='participant' {...register("participant", { required: "Ce champs est obligatoire" })} className='outline-none rounded-2xl text-input w-full' placeholder=''/>
+                        <Controller
+                            name="participant"
+                            id="participant"
+                            control={control}
+                            defaultValue={null}
+                            rules={{ required: "Ce champ est obligatoire" }}
+                            render={({ field }) => (
+                                <Select
+                                    options={options}
+                                    value={selectedOption}
+                                    onChange={handleChange}
+                                    isSearchable
+                                    placeholder="Rechercher un agent..."
+                                />
+                            )}
+                        />
                         {errors.participant && (<p className="text-red-500 text-sm">{errors.participant.message}</p>)}
                     </div>
 
                     <div className=''>
-                        <label htmlFor="">Direction du participant</label>
-                        <input type="text" id='participant' {...register("direction", { required: "Ce champs est obligatoire" })} className='outline-none rounded-2xl text-input w-full' placeholder='Ex: DAFC'/>
+                        <label htmlFor="direction">Direction du participant</label>
+                        <input type="text" id='direction' required {...register("direction", { required: "Ce champs est obligatoire" })} className='outline-none rounded-2xl text-input w-full' placeholder='Ex: DAFC'/>
                         {errors.direction && (<p className="text-red-500 text-sm">{errors.direction.message}</p>)}
                     </div>
 
                     <div className=''>
-                        <label htmlFor="">Service du participant</label>
-                        <input type="text" id='participant' {...register("service", { required: "Ce champs est obligatoire" })} className='outline-none rounded-2xl text-input w-full' placeholder='Ex: Service Ressources Humaines et Documentation'/>
+                        <label htmlFor="Service">Service du participant</label>
+                        <input type="text" id='Service' required {...register("service", { required: "Ce champs est obligatoire" })} className='outline-none rounded-2xl text-input w-full' placeholder='Ex: Service Ressources Humaines et Documentation'/>
                         {errors.service && (<p className="text-red-500 text-sm">{errors.service.message}</p>)}
                     </div>
 
                     <div className='md:flex-row w-full lg:w-1.5/3'>
-                        <label htmlFor="">Bureau du participant</label>
-                        <input type="text" id='participant' {...register("bureau", { required: "Ce champs est obligatoire" })} className='outline-none rounded-2xl text-input w-full' placeholder='Ex: Bureau Administration et Paie'/>
+                        <label htmlFor="bureau">Bureau du participant</label>
+                        <input type="text" id='bureau' required {...register("bureau", { required: "Ce champs est obligatoire" })} className='outline-none rounded-2xl text-input w-full' placeholder='Ex: Bureau Administration et Paie'/>
                         {errors.bureau && (<p className="text-red-500 text-sm">{errors.bureau.message}</p>)}
                     </div>
 
                     <div className='md:flex-row w-full lg:w-1.5/3'>
                         <label htmlFor="fonctionp">Fonction du participant</label>
-                        <input type="text" id='fonctionp' {...register("fonctionparticipant", { required: "Ce champs est obligatoire" })} className='outline-none rounded-2xl text-input w-full' placeholder='Ex: Assistante administrative'/>
+                        <input type="text" id='fonctionp' required {...register("fonctionparticipant", { required: "Ce champs est obligatoire" })} className='outline-none rounded-2xl text-input w-full' placeholder='Ex: Assistante administrative'/>
                         {errors.fonctionparticipant && (<p className="text-red-500 text-sm">{errors.fonctionparticipant.message}</p>)}
                     </div>
                 </div>
@@ -310,7 +370,7 @@ const NewOdm = () => {
                     <div className='mt-4'>
                         <label htmlFor="transport">Moyen de transport</label>
                         <select {...register("transport", { required: "Ce champs est obligatoire" })} id="transport" className='outline-none rounded-2xl text-input w-full'>
-                            <option>---Veuillez sélectionner une valeur---</option>
+                            <option value="" disabled>---Veuillez sélectionner une valeur---</option>
                             <option>Avion</option>
                             <option>Voiture</option>
                         </select>

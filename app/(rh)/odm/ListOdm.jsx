@@ -56,14 +56,13 @@ const ListOdm = () => {
 
     useEffect(()=>{
         getOdmsData()
-    })
+    }, [])
 
     const [odmList, setOdmList] = useState([])
     const getOdmsData = () =>{
         axiosInstance.get("ordremission/GetAll")
         .then(res=>{
             setOdmList(res.data)
-            console.log(res.data)
         })
     }
 
