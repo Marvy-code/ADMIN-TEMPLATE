@@ -4,28 +4,7 @@ import { useForm } from 'react-hook-form'
 import axiosInstance from '../../../utils/axios'
 import { useUser } from '../../context/UserContext'
 import Swal from 'sweetalert2';
-
-const initialFormData = {
-    agentDde: "",
-    fonctionDde: "",
-    validateur: "",
-    participant: "",
-    directionParticipant: "",
-    serviceParticipant: "",
-    bureauParticipant: "",
-    fonctionParticipant: "",
-    budget: "",
-    objectSpec: "",
-    depart: "",
-    retour: "",
-    moyenTransport: "",
-    priseCharge: "",
-    fraisMission: "",
-    fraisHebergement: "",
-    forfait: "",
-    joursMission: "",
-    joursHebergement: "",
-}
+import Loader from '../../../components/Loader'
 
 const NewOdm = () => {
 
@@ -68,6 +47,7 @@ const NewOdm = () => {
     }
 
     const onSubmit = async (data) => {
+        setLoader(true)
         axiosInstance.post("ordremission/create", {
             Id_mission: 1,
             Id_budget: 2,
@@ -92,7 +72,7 @@ const NewOdm = () => {
             Statut_ODM: "En attente",
             Cree_par: user?.Id_User
         })
-        .then((res)=>{
+        .then(()=>{
             Swal.fire({
                 position: "top-end",
                 icon: "success",
@@ -101,7 +81,7 @@ const NewOdm = () => {
                 timer: 1500
             });
             reset();
-            // setLoader(false)
+            setLoader(false)
         })
         .catch(()=>{
             Swal.fire({
@@ -109,7 +89,7 @@ const NewOdm = () => {
                 title: "Oops...",
                 text: "Une erreur svp, veuillez réessayer"
             });
-            // setLoader(false)
+            setLoader(false)
         })
     }
 
@@ -119,6 +99,82 @@ const NewOdm = () => {
 
     const closeModal = () => {
         setModalOpen(false);
+    }
+
+    const [annee, setAnnee] = useState('')
+    const [ligne, setLigne] = useState('')
+    const [libelle, setLibelle] = useState('')
+    const [montant, setMontant] = useState('')
+
+    const createBudget = async (e) => {
+        e.preventDefault()
+        setLoader(true)
+        
+        try{
+            axiosInstance.post("budget/create", {
+                Annee_budgetaire: annee,
+                Ligne_budgetaire: ligne,
+                Libelle_ligne_budgetaire: libelle,
+                Montant_alloue: montant
+            })
+            .then(()=>{
+                Swal.fire({
+                    position: "top-end",
+                    icon: "success",
+                    title: "Année budgétaire créée avec succès",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+                setModalOpen(false);
+                setLoader(false)
+                getBudgetDatas()
+                setAnnee('')
+                setLigne('')
+                setLibelle('')
+                setMontant('')
+            })
+            .catch(()=>{
+                Swal.fire({
+                    position: "top-end",
+                    icon: "error",
+                    title: "Une erreur est survenue, réessayez svp",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+                setLoader(false)
+            })
+        }
+        catch(err){
+            Swal.fire({
+                position: "top-end",
+                icon: "error",
+                title: "Une erreur réseau est survenue, vérifiez votre connexion svp",
+                showConfirmButton: false,
+                timer: 1500
+            });
+            setLoader(false)
+        }
+    }
+
+    const [yearArray, setYearArray] = useState([])
+    useEffect(() => {
+        const newArray = [];
+        for (let i = 2024; i <= new Date().getFullYear(); i++) {
+            newArray.push(i);
+        }
+        setYearArray(newArray);
+
+        getBudgetDatas()
+    }, []);
+
+    const [bugetList, setbudgetList] = useState([])
+
+    const getBudgetDatas = async () =>{
+        axiosInstance.get("budget/GetAll")
+        .then(res=>{
+            setbudgetList(res.data)
+            console.log(res.data)
+        })
     }
 
   return (
@@ -216,9 +272,10 @@ const NewOdm = () => {
                         <span className='flex items-center gap-2'>
                             <select id='budget' {...register("budget", { required: "Ce champs est obligatoire" })} className='outline-none rounded-2xl text-input w-full'>
                                 <option value="">---Sélectionnez une valeur---</option>
-                                <option value=""></option>
-                            </select>
-                            {/* <input type="number" id='budget' {...register("budget", { required: "Ce champs est obligatoire" })} className='outline-none rounded-2xl text-input w-full' placeholder='Ex: 350000'/> */}
+                                {bugetList.map((data) => (
+                                    <option value={data.Id_budget} key={data.Id_budget}>{data.Libelle_ligne_budgetaire}</option>
+                                ))}
+                            </select>                           
                             <button className='bg-gray-500 rounded-lg p-2 text-white'  onClick={() => handleAction()}>
                             
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
@@ -282,7 +339,7 @@ const NewOdm = () => {
 
                     <div className='mt-4'>
                         <label htmlFor="forfait">Forfait</label>
-                        <input type="text" id='forfait' {...register("forfait", { required: "Ce champs est obligatoire" })} className='outline-none rounded-2xl text-input w-full' placeholder="A la charge de l'ARPCE"/>
+                        <input type="number" id='forfait' {...register("forfait", { required: "Ce champs est obligatoire" })} className='outline-none rounded-2xl text-input w-full' placeholder="A la charge de l'ARPCE"/>
                         {errors.forfait && (<p className="text-red-500 text-sm">{errors.forfait.message}</p>)}
                     </div>
 
@@ -312,60 +369,60 @@ const NewOdm = () => {
                     className={`bg-white p-6 rounded-lg shadow-lg w-full lg:w-2/3 transform transition-transform duration-300 ease-in-out ${
                     modalOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
                     }`}
-                    onClick={(e) => e.stopPropagation()} // Empêcher la propagation pour ne pas fermer le modal en cliquant à l'intérieur
+                    onClick={(e) => e.stopPropagation()}
                 >
-                    {/* {selectedRow && ( */}
-                        <div>
-                            <div className="flex justify-between bg-gray-300 items-center px-6 py-4 border-b">
-                                <h3 className='uppercase'>Formulaire de création d'un budget</h3>
-                            </div>
+                    <div>
+                        <div className="flex justify-between bg-gray-300 items-center px-6 py-4 border-b">
+                            <h3 className='uppercase'>Formulaire de création d'un budget</h3>
+                        </div>
 
-                            <div className="p-6">
-                            <form className='form border-t flex flex-col gap-5 mt-4' onSubmit={handleSubmit(onSubmit)}>
+                        <div className="p-6">
+                            <form className='form border-t flex flex-col gap-5 mt-4' onSubmit={createBudget}>
                                 <div className='mt-4'>
                                     <label htmlFor="objet" className='font-primary'>Année budgétaire *</label>
-                                    <input type="date" id='objet' {...register("annee", { required: "L'année est obligatoire" })} placeholder='Objet de la mission' className='outline-none text-input rounded-2xl' />
-                                    {errors.annee && (<p className="text-red-500 text-sm">{errors.annee.message}</p>)}
+                                    <select id='objet' name='annee' value={annee} onChange={(e) => setAnnee(e.target.value)} required placeholder='' className='outline-none text-input rounded-2xl'>
+                                        <option value="">---Veuillez sélectionner l'année---</option>
+                                        {yearArray.map((year) => (
+                                            <option value={year} key={year}>{year}</option>
+                                        ))}
+                                    </select>
+                                    {/* <input type="date" id='objet' name='annee' value={annee} onChange={(e) => setAnnee(e.target.value)} required placeholder='' className='outline-none text-input rounded-2xl' /> */}
                                 </div>
 
                                 <span className='flex flex-col gap-5 md:flex-row'>
                                     <div className='w-full lg:w-1.5/3'>
                                         <label htmlFor="desc">Ligne budgétaire *</label>
-                                        <input type="number" id='desc' {...register("lignebudgetaire", { required: "La ligne budgétaire est obligatoire" })} placeholder='' className='outline-none text-input rounded-2xl w-full' />
-                                        {errors.lignebudgetaire && (<p className="text-red-500 text-sm">{errors.lignebudgetaire.message}</p>)}
+                                        <input type="number" id='desc' name='ligne' value={ligne} onChange={(e) => setLigne(e.target.value)} required placeholder='' className='outline-none text-input rounded-2xl w-full' />
                                     </div>
 
                                     <div className='w-full lg:w-1.5/3'>
                                         <label htmlFor="desc">Libellé de la ligne budgétaire *</label>
-                                        <input type="text" id='desc' {...register("lib", { required: "Le libellé de la ligne est obligatoire" })} placeholder='' className='outline-none text-input rounded-2xl w-full' />
-                                        {errors.lib && (<p className="text-red-500 text-sm">{errors.lib.message}</p>)}
+                                        <input type="text" id='desc' name='libelle' value={libelle} onChange={(e) => setLibelle(e.target.value)} required placeholder='' className='outline-none text-input rounded-2xl w-full' />
                                     </div>
                                 </span>
 
                                 <div className=''>
                                     <label htmlFor="desc">Montant *</label>
-                                    <input type="number" id='desc' {...register("montant", { required: "Le montant est obligatoire" })} placeholder='' className='outline-none text-input rounded-2xl' />
-                                    {errors.montant && (<p className="text-red-500 text-sm">{errors.montant.message}</p>)}
+                                    <input type="number" id='desc' name='montant' value={montant} onChange={(e) => setMontant(e.target.value)} required placeholder='' className='outline-none text-input rounded-2xl' />
                                 </div>
 
-                                    {!loader && <button className='bg-[#769C38] p-2 text-white font-bold rounded-2xl hover:bg-green-900' type='submit'>Enregistrer</button>}
+                                {!loader && <button type='submit' className='bg-[#769C38] p-2 text-white font-bold rounded-2xl hover:bg-green-900'>Enregistrer</button>}
 
-                                    <div className='justify-center'>
-                                        {loader && <Loader />}
-                                    </div>
-                                </form>
-                            </div>
+                                <div className='justify-center'>
+                                    {loader && <Loader />}
+                                </div>
+                            </form>
+                        </div>
 
-                            <div className="flex justify-end gap-2 px-6 py-4 border-t">
-                                <button
-                                    onClick={closeModal}
-                                    className="mt-4 bg-[#B2241B] text-white px-4 py-2 rounded float-end"
-                                    >
-                                    Fermer
-                                </button>
-                            </div>
-                        </div>  
-                    {/* )} */}
+                        <div className="flex justify-end gap-2 px-6 py-4 border-t">
+                            <button
+                                onClick={closeModal}
+                                className="mt-4 bg-[#B2241B] text-white px-4 py-2 rounded float-end"
+                                >
+                                Fermer
+                            </button>
+                        </div>
+                    </div>  
                 </div>
             </div>
         )}
