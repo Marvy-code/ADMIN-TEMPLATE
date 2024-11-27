@@ -35,7 +35,7 @@ const Liste = () => {
         {
             name: "Objet de la mission",
             selector: (row:any) => row.Objet_mission,
-            sortable: true
+            sortable: true,
         },
         {
             name: "Continent",

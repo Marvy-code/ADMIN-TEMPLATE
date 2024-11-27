@@ -38,7 +38,7 @@ const NewOdm = () => {
         handleSubmit, // Pour gérer la soumission
         control,
         reset, 
-        formState: { errors, isSubmitting }, // Pour gérer les erreurs et l'état d'envoi
+        formState: { errors, isValid }, // Pour gérer les erreurs et l'état d'envoi
     } = useForm();
 
 
@@ -48,12 +48,13 @@ const NewOdm = () => {
         }
         else if(formStep === 2){
             return (
-                <button className='bg-[#769C38] p-2 text-white font-bold rounded-2xl hover:bg-green-900 mt-2 w-30 mb-6'>Créer l'ODM</button>
+                <button type='submit' className='bg-[#769C38] p-2 text-white font-bold rounded-2xl hover:bg-green-900 mt-2 w-30 mb-6'>Créer l'ODM</button>
             )
         }
         else{
             return (
-                <button type='button' onClick={completeFormStep} className='bg-blue-700 p-2 text-white font-bold rounded-2xl hover:bg-green-900 mt-2 w-20'>Suivant</button>
+                undefined
+                // <button type='button' onClick={completeFormStep} className='bg-blue-700 p-2 text-white font-bold rounded-2xl hover:bg-green-900 mt-2 w-20'>Suivant</button>
             )
         }
     }
@@ -237,24 +238,12 @@ const NewOdm = () => {
                         </button>
                     )}
 
-                    <span>Etape {formStep + 1}: {formStep === 0 ? "Directeur validateur" : formStep === 1 ? "Identification du participant" : "A propos de l'ODM"} </span>
+                    <span>Etape {formStep + 1}/3 : {formStep === 0 ? "Directeur validateur" : formStep === 1 ? "Identification du participant" : "A propos de l'ODM"} </span>
                 </h3>
             </div>
 
             {formStep === 0 && (
                 <div>
-                    {/* <div className='mt-4'>
-                        <label htmlFor="agentdemandeur">Agent demandeur</label>
-                        <input type="text" id='agentdemandeur' {...register("agentdemandeur", { required: "Ce champs est obligatoire" })} className='outline-none rounded-2xl text-input w-full' autoFocus placeholder=''/>
-                        {errors.agentdemandeur && (<p className="text-red-500 text-sm">{errors.agentdemandeur.message}</p>)}
-                    </div>
-
-                    <div className='mt-4'>
-                        <label htmlFor="fonctiondemandeur">Fonction du demandeur</label>
-                        <input type="text" id='fonctiondemandeur' {...register("fonctiondemandeur", { required: "Ce champs est obligatoire" })} className='outline-none rounded-2xl text-input w-full' placeholder=''/>
-                        {errors.fonctiondemandeur && (<p className="text-red-500 text-sm">{errors.fonctiondemandeur.message}</p>)}
-                    </div> */}
-
                     <div className='mt-4'>
                         <label htmlFor="participant">Validateur</label>
                         <select {...register("validateur", { required: "Ce champs est obligatoire" })} required id="participant" className='outline-none rounded-2xl text-input w-full'>
@@ -421,6 +410,8 @@ const NewOdm = () => {
 
             {renderButton()}
         </form>
+
+        {formStep < 2 && <button type='button' onClick={completeFormStep} className='bg-blue-700 p-2 text-white font-bold rounded-2xl hover:bg-green-900 mt-2 w-20'>Suivant</button>}
 
             {/* Modal de création du budget */}
         {modalOpen && (

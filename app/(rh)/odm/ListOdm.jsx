@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import DataTable from 'react-data-table-component'
 import Jumbotron from '@/components/Jumbotron'
 import ProtectedRoute from "@/components/ProtectedRoute";
+import { formatDate } from '../../utilitaires/formatDate';
 
 import axiosInstance from '../../../utils/axios'
 import { LiaEyeSlashSolid } from 'react-icons/lia'
@@ -16,19 +17,31 @@ const ListOdm = () => {
         {
             name: "Nom du participant",
             selector: row => row.Nom_prenom_participant,
-            sortable: true
+            sortable: true,
+            cell: row=>(
+                <span className='text-gray-800 font-semibold'>{row.Nom_prenom_participant}</span>
+            )
         },
         {
             name: "Départ",
-            selector: row => row.Date_depart
+            selector: row => row.Date_depart,
+            cell:row=>(
+                <span className='capitalize'>{formatDate(row.Date_depart)}</span>
+            )
         },
         {
             name: "Retour",
-            selector: row => row.Date_retour
+            selector: row => row.Date_retour,
+            cell:row=>(
+                <span className='capitalize'>{formatDate(row.Date_retour)}</span>
+            )
         },
         {
             name: "Statut",
-            selector: row => row.Statut_ODM
+            selector: row => row.Statut_ODM,
+            cell: row => (
+                <span className='bg-green-700 text-white p-0.5 rounded-xl' >{row.Statut_ODM}</span>
+            )
         },
         {
             name: "Action",
