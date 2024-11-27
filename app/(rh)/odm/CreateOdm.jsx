@@ -69,7 +69,7 @@ const NewOdm = () => {
             Service_agent_participant: data.service,
             Bureau_agent_participant: data.bureau,
             Fonction_agent_demandeur: data.fonctiondemandeur,
-            Statut_ODM: "En attente",
+            Statut_ODM: "Validé",
             Cree_par: user?.Id_User
         })
         .then(()=>{

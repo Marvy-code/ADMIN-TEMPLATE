@@ -53,10 +53,10 @@ const Liste = () => {
             name: "Action",
             cell:(row:any)=>(
                 <div>
-            <button type='button' className="bg-blue-400 text-white p-2 rounded-full mr-1" onClick={() => handleAction(row)}><LiaEyeSlashSolid /></button>
-            <button type='button' className="bg-yellow-300 text-white p-2 rounded-full mr-1"><HiMiniPencilSquare /></button>
-            <button type='button' className="bg-red-950 text-white p-2 rounded-full"><IoTrashBin /></button>
-        </div>
+                    <button type='button' className="bg-blue-400 text-white p-2 rounded-full mr-1" onClick={() => handleAction(row)}><LiaEyeSlashSolid /></button>
+                    <button type='button' className="bg-yellow-300 text-white p-2 rounded-full mr-1"><HiMiniPencilSquare /></button>
+                    <button type='button' className="bg-red-950 text-white p-2 rounded-full"><IoTrashBin /></button>
+                </div>
             )
             // selector: (row:any) => row.action
         }
