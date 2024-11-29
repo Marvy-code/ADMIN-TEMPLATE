@@ -457,7 +457,7 @@ const NewOdm = () => {
                                     <input type="number" id='desc' name='montant' value={montant} onChange={(e) => setMontant(e.target.value)} required placeholder='' className='outline-none text-input rounded-2xl' />
                                 </div>
 
-                                {!loader && <button type='submit' className='bg-[#769C38] p-2 text-white font-bold rounded-2xl hover:bg-green-900'>Enregistrer</button>}
+                                {!loader && <button type='submit' className='bg-[#769C38] p-2 text-white font-bold rounded-2xl hover:bg-green-900'>Je crée le budget</button>}
 
                                 <div className='justify-center'>
                                     {loader && <Loader />}

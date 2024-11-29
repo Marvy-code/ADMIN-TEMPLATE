@@ -10,6 +10,7 @@ import { LiaEyeSlashSolid } from 'react-icons/lia'
 import { HiMiniPencilSquare } from 'react-icons/hi2'
 import { IoTrashBin } from 'react-icons/io5'
 import { HiAdjustments } from 'react-icons/hi';
+import Link from 'next/link';
 
 const ListOdm = () => {
 
@@ -19,7 +20,7 @@ const ListOdm = () => {
             selector: row => row.Nom_prenom_participant,
             sortable: true,
             cell: row=>(
-                <span className='text-gray-800 font-semibold'>{row.Nom_prenom_participant}</span>
+                <Link href={`/odm/pdf/${row.Id_ordre_mission}/${row.Nom_prenom_participant}`} className='text-blue-900 font-semibold text-sm'>{row.Nom_prenom_participant}</Link>
             )
         },
         {
@@ -40,7 +41,13 @@ const ListOdm = () => {
             name: "Statut",
             selector: row => row.Statut_ODM,
             cell: row => (
-                <span className='bg-green-700 text-white p-0.5 rounded-xl' >{row.Statut_ODM}</span>
+                row.Statut_ODM === 'Pré validé' 
+                ? (<span className='bg-blue-500 p-2 rounded-xl'></span>) 
+                : row.Statut_ODM === 'Validé'
+                ? (<span className='bg-yellow-500 p-2 rounded-xl'></span>)
+                : row.Statut_ODM === 'Approuvé'
+                ? (<span className='bg-green-700 p-2 rounded-xl'></span>)
+                : null
             )
         },
         {
@@ -76,6 +83,7 @@ const ListOdm = () => {
         axiosInstance.get("ordremission/GetAll")
         .then(res=>{
             setOdmList(res.data)
+            console.log(res.data)
         })
     }
 
@@ -98,9 +106,20 @@ const ListOdm = () => {
                     />
                 </div>
             </div>
+
+            <div className='bg-gray-500 p-2'>
+                <div className='items-center flex justify-center text-white'>
+                    <p className='gap-2'>
+                        Légende:
+                        <span className='bg-yellow-500 text-black p-0.5 rounded-xl mr-2 ml-2'>Pré validé</span>
+                        <span className='bg-blue-500 text-white p-0.5 rounded-xl mr-2'>Validé</span>
+                        <span className='bg-green-700 text-white p-0.5 rounded-xl'>Approuvé</span>
+                    </p>
+                </div>
+            </div>
         </div>
     </ProtectedRoute>
   )
 }
-
+// item.Statut_ODM
 export default ListOdm
