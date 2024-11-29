@@ -13,6 +13,7 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 import { LiaEyeSlashSolid } from 'react-icons/lia';
 import { HiMiniPencilSquare } from 'react-icons/hi2';
 import { IoTrashBin } from 'react-icons/io5';
+import Link from 'next/link';
 
 
 const Liste = () => {
@@ -36,18 +37,16 @@ const Liste = () => {
             name: "Objet de la mission",
             selector: (row:any) => row.Objet_mission,
             sortable: true,
+            cell: (row:any)=>(
+                <Link href={`/odm/${row.Id_mission}/${row.Objet_mission}`} className='text-blue-900 font-semibold text-sm'>{row.Objet_mission}</Link>
+            )
         },
         {
-            name: "Continent",
-            selector: (row:any) => row.Continent_mission
-        },
-        {
-            name: "Pays",
-            selector: (row:any) => row.Pays_mission
-        },
-        {
-            name: "Ville",
-            selector: (row:any) => row.Ville_mission
+            name: "Ville/Pays",
+            selector: (row:any) => row.Ville_mission,
+            cell:(row:any)=>(
+                <span>{row.Ville_mission}/ {row.Pays_mission}</span>
+            )
         },
         {
             name: "Action",
@@ -58,7 +57,6 @@ const Liste = () => {
                     <button type='button' className="bg-red-950 text-white p-2 rounded-full"><IoTrashBin /></button>
                 </div>
             )
-            // selector: (row:any) => row.action
         }
     ]
     
@@ -78,6 +76,8 @@ const Liste = () => {
             await axiosInstance.get('mission/getall')
             .then(res=>{
                 setData(res.data)
+                console.log(res.data);
+                
             })
         }catch(err){
 
