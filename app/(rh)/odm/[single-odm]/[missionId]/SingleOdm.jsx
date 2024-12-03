@@ -107,7 +107,7 @@ const SingleOdm = () => {
                                     {/* Card Footer */}
 
                                     <div className='p-4 border-t md:mt-5 mt-8'>
-                                        <p className='font-bold'>2 ODM ont été retrouvés pour cette mission <span className='float-end text-blue-700 flex'><Link href={`/missions/${singleOdm}/${missionId}`}>Consulter les ODM</Link></span></p>
+                                        <p className='font-bold'>--- <span className='float-end text-blue-700 flex'><Link href={`/missions/${singleOdm}/${missionId}`}>Consulter les ODM</Link></span></p>
                                     </div>
 
                                     <div className='bg-gradient-to-r  from-[#B2241B] to-[#769C38] p-1'></div>

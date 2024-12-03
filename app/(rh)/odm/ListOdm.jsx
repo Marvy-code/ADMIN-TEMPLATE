@@ -6,7 +6,6 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 import { formatDate } from '../../utilitaires/formatDate';
 
 import axiosInstance from '../../../utils/axios'
-import { LiaEyeSlashSolid } from 'react-icons/lia'
 import { HiMiniPencilSquare } from 'react-icons/hi2'
 import { IoTrashBin } from 'react-icons/io5'
 import { HiAdjustments } from 'react-icons/hi';
@@ -15,6 +14,14 @@ import Link from 'next/link';
 const ListOdm = () => {
 
     const columns = [
+        {
+            name: "Num ODM",
+            selector: row => row.Id_ordre_mission,
+            sortable: true,
+            cell: row=>(
+                <Link href={`/odm/pdf/${row.Id_ordre_mission}/${row.Nom_prenom_participant}`} className='text-blue-900 font-semibold text-sm'>{row.Id_ordre_mission}</Link>
+            )
+        },
         {
             name: "Nom du participant",
             selector: row => row.Nom_prenom_participant,
@@ -54,7 +61,6 @@ const ListOdm = () => {
             name: "Action",
             cell:(row)=>(
                 <div>
-                    <button type='button' className="bg-blue-400 text-white p-2 rounded-full mr-1" onClick={() => handleAction(row)}><LiaEyeSlashSolid /></button>
                     <button type='button' className="bg-yellow-300 text-white p-2 rounded-full mr-1"><HiMiniPencilSquare /></button>
                     <button type='button' className="bg-green-700 text-white p-2 rounded-full mr-1"><HiAdjustments /></button>
                     <button type='button' className="bg-red-950 text-white p-2 rounded-full"><IoTrashBin /></button>
