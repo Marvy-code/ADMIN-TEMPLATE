@@ -184,6 +184,7 @@ const NewOdm = ({idMission}) => {
     }
 
     const [yearArray, setYearArray] = useState([])
+
     useEffect(() => {
         const newArray = [];
         for (let i = 2024; i <= new Date().getFullYear(); i++) {
@@ -192,7 +193,8 @@ const NewOdm = ({idMission}) => {
         setYearArray(newArray);
 
         getBudgetDatas()    
-        getAgentsARPCE();
+        getAgentsARPCE()
+        getDirection()
     }, []);
 
     const [bugetList, setbudgetList] = useState([])
@@ -221,6 +223,25 @@ const NewOdm = ({idMission}) => {
 
     const handleChange = (selectedOption) => {
         setSelectedOption(selectedOption);
+    };
+
+    const [direction, setDirection] = useState([])
+    const [selectedDirection, setSelectedDirection] = useState(null);
+
+    const getDirection = () =>{
+        axiosInstance.get("poste/getdirection")
+        .then(res=>{
+            setDirection(res.data)
+        })
+    }
+
+    const directionList = direction.map((item) => ({
+        value: item.idORGANISATION,
+        label: item.libelle,
+    }));
+
+    const handleChangeDirection = (selectedDirection) => {
+        setSelectedDirection(selectedDirection);
     };
 
   return (
@@ -289,7 +310,23 @@ const NewOdm = ({idMission}) => {
 
                         <div className=''>
                             <label htmlFor="direction">Direction du participant *</label>
-                            <input type="text" id='direction' required {...register("direction", { required: "Ce champs est obligatoire" })} className='outline-none rounded-2xl text-input w-full' placeholder='Ex: DAFC'/>
+                            <Controller
+                                name="direction"
+                                id="direction"
+                                control={control}
+                                defaultValue={null}
+                                rules={{ required: "Ce champ est obligatoire" }}
+                                render={({ field }) => (
+                                    <Select
+                                        options={directionList}
+                                        value={selectedDirection}
+                                        onChange={handleChangeDirection}
+                                        isSearchable
+                                        placeholder="Rechercher une direction..."
+                                    />
+                                )}
+                            />
+                            {/* <input type="text" id='direction' required {...register("direction", { required: "Ce champs est obligatoire" })} className='outline-none rounded-2xl text-input w-full' placeholder='Ex: DAFC'/> */}
                             {errors.direction && (<p className="text-red-500 text-sm">{errors.direction.message}</p>)}
                         </div>
 

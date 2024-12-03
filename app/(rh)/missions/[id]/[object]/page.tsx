@@ -8,7 +8,6 @@ import axiosInstance from '@/utils/axios';
 import DataTable from 'react-data-table-component';
 import Link from 'next/link';
 import { formatDate } from '@/app/utilitaires/formatDate';
-import { LiaEyeSlashSolid } from 'react-icons/lia';
 import { HiMiniPencilSquare } from 'react-icons/hi2';
 import { HiAdjustments } from 'react-icons/hi';
 import { IoTrashBin } from 'react-icons/io5';

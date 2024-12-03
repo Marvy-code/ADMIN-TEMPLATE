@@ -89,7 +89,6 @@ const ListOdm = () => {
         axiosInstance.get("ordremission/GetAll")
         .then(res=>{
             setOdmList(res.data)
-            console.log(res.data)
         })
     }
 
