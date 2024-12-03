@@ -40,7 +40,7 @@ const Nav = () => {
 
         <div className="flex flex-col">
           <span className='text-xs leading-3 text-white font-medium'><span>{user?.Prenom}</span> <span className='uppercase'>{user?.Nom}</span></span>
-          <span className='text-[12px] text-white text-right'>{user?.Email}</span>
+          <span className='text-[12px] text-white text-right lowercase'>{user?.Email}</span>
         </div>
 
         <Image src={'/assets/images/user.png'} alt='' width={25} height={25} className='rounded-full'/>

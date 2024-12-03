@@ -20,7 +20,7 @@ export default function PrintPage({ params: paramsPromise }) {
       try {
         const response = await axiosInstance.get(`ordremission/getbyid/${id}`);
         setData(response.data); 
-        console.log('Mes données, ', response.data)
+        // console.log('Mes données, ', response.data)
       } catch (error) {
         setError('Erreur de récupération des données');
         console.error(error);

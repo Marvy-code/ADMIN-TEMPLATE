@@ -8,7 +8,7 @@ import Loader from '../../../components/Loader'
 import Select from "react-select";
 import ProtectedRoute from '@/components/ProtectedRoute'
 
-const NewOdm = () => {
+const NewOdm = ({idMission}) => {
     const { user } = useUser();
 
     const [idCurrentUser, setIdCurrentuser] = useState()
@@ -68,8 +68,8 @@ const NewOdm = () => {
         setLoader(true)
         try{
             axiosInstance.post("ordremission/create", {
-                Id_mission: 1,
-                Id_budget: 2,
+                Id_mission: idMission,
+                Id_budget: data.budget,
                 Id_agent_demandeur: idCurrentUser,
                 Id_agent_participant: selectedOption.value,
                 Id_poste_validateur: 44, //A changer
