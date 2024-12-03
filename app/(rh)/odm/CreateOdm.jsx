@@ -85,8 +85,8 @@ const NewOdm = ({idMission}) => {
                 Nbre_jour_hebergement: data.jourshebergement,
                 Fonction_agent_participant: data.fonctionparticipant,
                 Direction_agent_participant: selectedDirection.value,
-                Service_agent_participant: selectedService.value,
-                Bureau_agent_participant: selectedBureaux.value,
+                Service_agent_participant: selectedService?.value || 0,
+                Bureau_agent_participant: selectedBureaux?.value || 0,
                 Fonction_agent_demandeur: fonctionCurrentUser,
                 Statut_ODM: "Validé",
                 Cree_par: idCurrentUser
@@ -273,8 +273,7 @@ const NewOdm = ({idMission}) => {
 
     useEffect(() => {
         const getBureau = async () => {
-            // console.log(selectedService.value)
-            if (!selectedService) return; // Si aucune direction n'est sélectionnée, ne pas effectuer la requête
+            if (!selectedService) return;
                 try {
                     const response = await axiosInstance.get(`/poste/getbureau/${selectedService.value}`);
                     setBureauxList(response.data.map((bur) => ({ value: bur.idORGANISATION, label: bur.libelle })));
@@ -283,12 +282,39 @@ const NewOdm = ({idMission}) => {
                 }
             };
         getBureau();
-    }, [selectedService]); // Déclenche uniquement lorsque selectedDirection change
+    }, [selectedService]); 
 
     // Gérer le changement de service
     const handleChangeBureau = (selectedService) => {
         setSelectedBureau(selectedService);
     };
+
+    const [posteValidateur, setPostValidateur] = useState([])
+
+    const getPosteValidateur = () =>{
+        axiosInstance.get("poste/getpostevalidate")
+        .then(res=>{
+            console.log(res.data)
+            setPostValidateur(res.data)
+        })
+    }
+
+    
+    // Récupération de la fonction du user
+    const [fonction, setFonction] = useState('');
+    useEffect(() => {
+        const getFonction = async () => {
+            if (!selectedOption) return; 
+                try {
+                    const response = await axiosInstance.get(`/poste/getfonction/${selectedOption.value}`);
+                    setFonction(response.data);
+                } catch (err) {
+                    console.error("Erreur lors de la récupération des bureaux", err);
+                }
+            };
+            getFonction()
+            getPosteValidateur()
+    }, [selectedOption]);
     
 
   return (
@@ -317,13 +343,9 @@ const NewOdm = ({idMission}) => {
                             <label htmlFor="participant">Validateur *</label>
                             <select {...register("validateur", { required: "Ce champs est obligatoire" })} required id="participant" className='outline-none rounded-2xl text-input w-full'>
                                 <option>---Veuillez sélectionner une valeur---</option>
-                                <option value="DG">DG</option>
-                                <option value="DEM">DEM</option>
-                                <option value="DAFC">DAFC</option>
-                                <option value="DAJI">DAJI</option>
-                                <option value="DAJI">DRSCE</option>
-                                <option value="DRSCE">DRP</option>
-                                <option value="DPP">DPP</option>
+                                {posteValidateur.map((data) => (
+                                        <option value={data.Id_poste} key={data.Id_poste}>{data.Abbr_poste + ' --- ' + data.Libelle_poste}</option>
+                                    ))}
                             </select>
                             {errors.validateur && (<p className="text-red-500 text-sm">{errors.validateur.message}</p>)}
                         </div>
@@ -415,19 +437,19 @@ const NewOdm = ({idMission}) => {
                                     onChange={handleChangeBureau}
                                     isSearchable
                                     placeholder="Rechercher un bureau..."
-                                    isDisabled={!selectedService} // Désactiver tant qu'une direction n'est pas sélectionnée
+                                    isDisabled={!selectedService}
                                     />
                                 )}
                             />
                             {/* <input type="text" id='bureau' required {...register("bureau", { required: "Ce champs est obligatoire" })} className='outline-none rounded-2xl text-input w-full' placeholder='Ex: Bureau Administration et Paie'/> */}
                             {errors.bureau && (<p className="text-red-500 text-sm">{errors.bureau.message}</p>)}
                         </div>
-
-                        <div className='md:flex-row w-full lg:w-1.5/3'>
+                        {/* handleChangeFonction */}
+                        {fonction && (<div className='md:flex-row w-full lg:w-1.5/3'>
                             <label htmlFor="fonctionp">Fonction du participant *</label>
-                            <input type="text" id='fonctionp' required {...register("fonctionparticipant", { required: "Ce champs est obligatoire" })} className='outline-none rounded-2xl text-input w-full' placeholder='Ex: Assistante administrative'/>
+                            <input type="text" id='fonctionp' required {...register("fonctionparticipant", { required: "Ce champs est obligatoire" })} value={fonction[0].fonction} className='outline-none rounded-2xl text-input w-full' placeholder='Ex: Assistante administrative'/>
                             {errors.fonctionparticipant && (<p className="text-red-500 text-sm">{errors.fonctionparticipant.message}</p>)}
-                        </div>
+                        </div>)}
                     </div>
                 )}
 

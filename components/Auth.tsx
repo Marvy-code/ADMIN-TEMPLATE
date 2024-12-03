@@ -34,11 +34,9 @@ const Auth = () => {
         })
         if (!response.ok) {
             if (response.status === 401) {
-              // Identifiants incorrects
               setError("Identifiants incorrects. Veuillez réessayer.");
               setLoader(false)
             } else {
-              // Autres erreurs
               setError(`Nom d\'utilisateur ou mot de passe incorrect`);
               setLoader(false)
             }
@@ -47,9 +45,7 @@ const Auth = () => {
 
         if(response.ok){
             const data = await response.json();
-            // Sauvegarder le token dans localStorage ou cookies
             localStorage.setItem('token', data.token);
-            // Rediriger vers une page protégée
             router.push('/missions');     
         }
         else{
