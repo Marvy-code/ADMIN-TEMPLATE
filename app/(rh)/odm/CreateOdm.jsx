@@ -84,9 +84,9 @@ const NewOdm = ({idMission}) => {
                 Nbre_jour_mission: data.joursmission,
                 Nbre_jour_hebergement: data.jourshebergement,
                 Fonction_agent_participant: data.fonctionparticipant,
-                Direction_agent_participant: data.direction,
-                Service_agent_participant: data.service,
-                Bureau_agent_participant: data.bureau,
+                Direction_agent_participant: selectedDirection.value,
+                Service_agent_participant: selectedService.value,
+                Bureau_agent_participant: selectedBureaux.value,
                 Fonction_agent_demandeur: fonctionCurrentUser,
                 Statut_ODM: "Validé",
                 Cree_par: idCurrentUser
@@ -244,6 +244,53 @@ const NewOdm = ({idMission}) => {
         setSelectedDirection(selectedDirection);
     };
 
+    // Récupérer les services pour une direction donnée
+    const [serviceList, setServiceList] = useState([]);
+    const [selectedService, setSelectedService] = useState(null);
+
+    useEffect(() => {
+        const getServices = async () => {
+            if (!selectedDirection) return; // Si aucune direction n'est sélectionnée, ne pas effectuer la requête
+                try {
+                    const response = await axiosInstance.get(`/poste/getservice/${selectedDirection.value}`);
+                    setServiceList(response.data.map((srv) => ({ value: srv.idORGANISATION, label: srv.libelle })));
+                } catch (err) {
+                    console.error("Erreur lors de la récupération des services", err);
+                }
+            };
+        getServices();
+    }, [selectedDirection]); // Déclenche uniquement lorsque selectedDirection change
+
+    // Gérer le changement de service
+    const handleChangeService = (selectedDirection) => {
+        setSelectedService(selectedDirection);
+    };
+
+
+    // Récupération des bureaux
+    const [BureauxList, setBureauxList] = useState([]);
+    const [selectedBureaux, setSelectedBureau] = useState(null);
+
+    useEffect(() => {
+        const getBureau = async () => {
+            // console.log(selectedService.value)
+            if (!selectedService) return; // Si aucune direction n'est sélectionnée, ne pas effectuer la requête
+                try {
+                    const response = await axiosInstance.get(`/poste/getbureau/${selectedService.value}`);
+                    setBureauxList(response.data.map((bur) => ({ value: bur.idORGANISATION, label: bur.libelle })));
+                } catch (err) {
+                    console.error("Erreur lors de la récupération des bureaux", err);
+                }
+            };
+        getBureau();
+    }, [selectedService]); // Déclenche uniquement lorsque selectedDirection change
+
+    // Gérer le changement de service
+    const handleChangeBureau = (selectedService) => {
+        setSelectedBureau(selectedService);
+    };
+    
+
   return (
     <ProtectedRoute>
         <div className=''>
@@ -331,14 +378,48 @@ const NewOdm = ({idMission}) => {
                         </div>
 
                         <div className=''>
-                            <label htmlFor="Service">Service du participant *</label>
-                            <input type="text" id='Service' required {...register("service", { required: "Ce champs est obligatoire" })} className='outline-none rounded-2xl text-input w-full' placeholder='Ex: Service Ressources Humaines et Documentation'/>
+                            <label htmlFor="Service">Service du participant</label>
+                            <Controller
+                                name="service"
+                                id="Service"
+                                control={control}
+                                defaultValue={null}
+                                render={({ field }) => (
+                                    <Select
+                                    {...field}
+                                    options={serviceList}
+                                    value={selectedService}
+                                    onChange={handleChangeService}
+                                    isSearchable
+                                    placeholder="Rechercher un service..."
+                                    isDisabled={!selectedDirection} // Désactiver tant qu'une direction n'est pas sélectionnée
+                                    />
+                                )}
+                            />
+                            {/* <input type="text" id='Service' required {...register("service", { required: "Ce champs est obligatoire" })} className='outline-none rounded-2xl text-input w-full' placeholder='Ex: Service Ressources Humaines et Documentation'/> */}
                             {errors.service && (<p className="text-red-500 text-sm">{errors.service.message}</p>)}
                         </div>
 
                         <div className='md:flex-row w-full lg:w-1.5/3'>
-                            <label htmlFor="bureau">Bureau du participant *</label>
-                            <input type="text" id='bureau' required {...register("bureau", { required: "Ce champs est obligatoire" })} className='outline-none rounded-2xl text-input w-full' placeholder='Ex: Bureau Administration et Paie'/>
+                            <label htmlFor="bureau">Bureau du participant</label>
+                            <Controller
+                                name="bureau"
+                                id="bureau"
+                                control={control}
+                                defaultValue={null}
+                                render={({ field }) => (
+                                    <Select
+                                    {...field}
+                                    options={BureauxList}
+                                    value={selectedBureaux}
+                                    onChange={handleChangeBureau}
+                                    isSearchable
+                                    placeholder="Rechercher un bureau..."
+                                    isDisabled={!selectedService} // Désactiver tant qu'une direction n'est pas sélectionnée
+                                    />
+                                )}
+                            />
+                            {/* <input type="text" id='bureau' required {...register("bureau", { required: "Ce champs est obligatoire" })} className='outline-none rounded-2xl text-input w-full' placeholder='Ex: Bureau Administration et Paie'/> */}
                             {errors.bureau && (<p className="text-red-500 text-sm">{errors.bureau.message}</p>)}
                         </div>
 
