@@ -81,47 +81,47 @@ export default function PrintPage({ params: paramsPromise }) {
             <div style={{ borderLeft: '5px solid yellow' }}>
               <div style={{ borderLeft: '5px solid #B2241B', padding: '50px' }}>
                 <Image src={'/assets/images/logo-file-odm.png'} width={1400} height={900} alt="" />
-                <h3 className="font-bold ml-5 text-4xl">N<sup>o</sup>093/ARPCE-DG/DAFC/SRHD/2024</h3>
+                <h3 className="font-bold ml-5 text-4xl">N<sup>o</sup>&nbsp;{ data[0].Id_ordre_mission }/ARPCE-DG/DAFC/SRHD/2024</h3>
   
                 <h2 className="" style={{ textAlign: 'center', fontSize: '55px', fontWeight: 'bold', paddingTop: '80px', textDecoration: 'underline' }}>ORDRE DE MISSION</h2>
   
                 <p className="mt-[80px] text-4xl text-justify">
-                  Le Directeur Administratif Financier et Comptable de l'Agence de Régulation des Postes et des Communications Électroniques (A.R.P.C.E.), soussigné, prescrit une mission à :
+                  Le { data[0].Libelle_poste } de l'Agence de Régulation des Postes et des Communications Électroniques (A.R.P.C.E.), soussigné, prescrit une mission à :
                 </p>
   
                 <table className="text-4xl border-separate border-spacing-4" style={{ width: '100%', marginTop: '80px', borderCollapse: 'collapse' }}>
                   <tbody>
                     <tr>
                       <td style={{  }}><strong>Noms et Prénoms</strong></td>
-                      <td style={{  }}>{ data[0].Nom_prenom_participant }</td>
+                      <td style={{  }}>: { data[0].Nom_prenom_participant }</td>
                     </tr>
                     <tr>
                       <td style={{ paddingTop: '20px' }}><strong>Fonction</strong></td>
-                      <td style={{ paddingTop: '20px' }}>{ data[0].Fonction_agent_participant}</td>
+                      <td style={{ paddingTop: '20px' }}>: { data[0].Fonction_agent_participant}</td>
                     </tr>
                     <tr>
                       <td style={{ paddingTop: '20px' }}><strong>Objet de la mission</strong></td>
-                      <td style={{ paddingTop: '20px' }}>{data[0].Objet_mission}</td>
+                      <td style={{ paddingTop: '20px' }}>: {data[0].Objet_mission}</td>
                     </tr>
                     <tr>
                       <td style={{ paddingTop: '20px' }}><strong>Destination</strong></td>
-                      <td style={{ paddingTop: '20px' }}>{data[0].Ville_mission}</td>
+                      <td style={{ paddingTop: '20px' }}>: {data[0].Ville_mission}</td>
                     </tr>
                     <tr>
                       <td style={{ paddingTop: '20px' }}><strong>Moyen de Transport</strong></td>
-                      <td style={{ paddingTop: '20px' }}>{data[0].Moyen_transport}</td>
+                      <td style={{ paddingTop: '20px' }}>: {data[0].Moyen_transport}</td>
                     </tr>
                     <tr>
                       <td style={{ paddingTop: '20px' }}><strong>Date de départ</strong></td>
-                      <td className='capitalize' style={{ paddingTop: '20px' }}>{formatDate(data[0].Date_depart)}</td>
+                      <td className='capitalize' style={{ paddingTop: '20px' }}>: {formatDate(data[0].Date_depart)}</td>
                     </tr>
                     <tr>
                       <td style={{ paddingTop: '20px' }}><strong>Date de retour</strong></td>
-                      <td className='capitalize' style={{ paddingTop: '20px' }}>{formatDate(data[0].Date_retour)}</td>
+                      <td className='capitalize' style={{ paddingTop: '20px' }}>: {formatDate(data[0].Date_retour)}</td>
                     </tr>
                     <tr>
                       <td style={{ paddingTop: '20px' }}><strong>Frais de transport et séjour</strong></td>
-                      <td style={{ paddingTop: '20px' }}>{data[0].Nature_prise_en_charge}</td>
+                      <td style={{ paddingTop: '20px' }}>: {data[0].Nature_prise_en_charge}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -137,9 +137,12 @@ export default function PrintPage({ params: paramsPromise }) {
                 </div>
   
                 <div className="text-gray-400 border-t-4 border-[#B2241B]" style={{ fontSize: '28px', marginTop: '50px', textAlign: 'center' }}>
-                  <p>Etablissement public administratif doté de la personnalité juridique et de l’autonomie financière placé sous la tutelle du MPTEN
+                  <p>
+                    Etablissement public administratif doté de la personnalité juridique et de l’autonomie financière placé sous la tutelle du MPTEN
                     Adresse : 91, Bis Avenue de l'Amitié, Immeuble ARPCE <br /> BP : 2490 Brazzaville | République du Congo | Téléphone : +242 510 7272
-                    <br /> Email : contact@arpce.cg</p>
+                    <br /> 
+                    Email : contact@arpce.cg
+                  </p>
                 </div>
               </div>
             </div>

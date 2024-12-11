@@ -72,7 +72,7 @@ const NewOdm = ({idMission}) => {
                 Id_budget: data.budget,
                 Id_agent_demandeur: idCurrentUser,
                 Id_agent_participant: selectedOption.value,
-                Id_poste_validateur: 44, //A changer
+                Id_poste_validateur: data.validateur, 
                 Objectif_specifique_ODM: data.objet,
                 Date_depart:data.depart,
                 Date_retour: data.retour,
@@ -294,7 +294,6 @@ const NewOdm = ({idMission}) => {
     const getPosteValidateur = () =>{
         axiosInstance.get("poste/getpostevalidate")
         .then(res=>{
-            console.log(res.data)
             setPostValidateur(res.data)
         })
     }
@@ -340,10 +339,10 @@ const NewOdm = ({idMission}) => {
                 {formStep === 0 && (
                     <div>
                         <div className='mt-4'>
-                            <label htmlFor="participant">Validateur *</label>
-                            <select {...register("validateur", { required: "Ce champs est obligatoire" })} required id="participant" className='outline-none rounded-2xl text-input w-full'>
+                            <label htmlFor="validateur">Validateur *</label>
+                            <select {...register("validateur", { required: "Ce champs est obligatoire" })} required id="validateur" className='outline-none rounded-2xl text-input w-full'>
                                 <option>---Veuillez sélectionner une valeur---</option>
-                                {posteValidateur.map((data) => (
+                                {posteValidateur.map((data)=>(
                                         <option value={data.Id_poste} key={data.Id_poste}>{data.Abbr_poste + ' --- ' + data.Libelle_poste}</option>
                                     ))}
                             </select>

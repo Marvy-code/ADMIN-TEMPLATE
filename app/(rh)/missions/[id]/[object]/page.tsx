@@ -102,7 +102,6 @@ const page = () => {
         try {
             axiosInstance.get(`ordremission/getbymission/${id}`)
                 .then(res => {
-                    console.log(res.data)
                     setOdmByIdMission(res.data)
                 })
         }
@@ -126,7 +125,7 @@ const page = () => {
 
                     {missionById && missionById.length > 0 ? (
                         <div>
-                            <div className='text-gray-400 mt-5'>
+                            <div className='text-gray-800 mt-5 shadow-2xl p-2'>
                                 <span>
                                     <span className='flex items-center font-bold'>
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6 text-gray-400">
