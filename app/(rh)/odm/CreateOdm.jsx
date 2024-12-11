@@ -16,10 +16,23 @@ const NewOdm = ({idMission}) => {
 
     let userIdData  = null
     let userFonctionData = null
+
+    let idPostDemandeur = null
+    const [idDemandeur, setIdDemandeur] = useState([])
+
     axiosInstance.get(`poste/getbymatricule/${user?.Num_Matricule}`)
     .then(res=>{
         userIdData = res.data[0].Id_agent
         setIdCurrentuser(userIdData)
+
+        axiosInstance.get(`/poste/getfonction/${userIdData}`)
+        .then(res=>{
+            // console.log('user connecté ',res.data)
+            idPostDemandeur = res.data[0].Id_poste
+            setIdDemandeur(idPostDemandeur)
+
+            // console.log(idPostDemandeur)
+        })
 
         userFonctionData = res.data[0].fonction
         setFonctionCurrentuser(userFonctionData)
@@ -81,13 +94,13 @@ const NewOdm = ({idMission}) => {
                 Frais_mission: data.fraismission,
                 Frais_hebergement: data.fraishebergement,
                 Forfait: data.forfait,
-                Nbre_jour_mission: data.joursmission,
-                Nbre_jour_hebergement: data.jourshebergement,
-                Fonction_agent_participant: data.fonctionparticipant,
+                // Nbre_jour_mission: data.joursmission,
+                // Nbre_jour_hebergement: data.jourshebergement,
+                Id_poste_participant: data.fonctionparticipant,
                 Direction_agent_participant: selectedDirection.value,
                 Service_agent_participant: selectedService?.value || 0,
                 Bureau_agent_participant: selectedBureaux?.value || 0,
-                Fonction_agent_demandeur: fonctionCurrentUser,
+                Id_poste_demandeur: idPostDemandeur,
                 Statut_ODM: "Validé",
                 Cree_par: idCurrentUser
             })
@@ -106,7 +119,7 @@ const NewOdm = ({idMission}) => {
                 Swal.fire({
                     icon: "error",
                     title: "Oops...",
-                    text: "Impossible de créer cet ODM car cet agent a déjà un ODM pour cette même mission"
+                    text: "Veuillez réessayer svp"
                 });
                 setLoader(false)
             })
@@ -126,6 +139,7 @@ const NewOdm = ({idMission}) => {
 
     const closeModal = () => {
         setModalOpen(false);
+        getBudgetDatas()
     }
 
     const [annee, setAnnee] = useState('')
@@ -306,6 +320,7 @@ const NewOdm = ({idMission}) => {
             if (!selectedOption) return; 
                 try {
                     const response = await axiosInstance.get(`/poste/getfonction/${selectedOption.value}`);
+                    console.log(response.data)
                     setFonction(response.data);
                 } catch (err) {
                     console.error("Erreur lors de la récupération des bureaux", err);
@@ -313,7 +328,7 @@ const NewOdm = ({idMission}) => {
             };
             getFonction()
             getPosteValidateur()
-    }, [selectedOption]);
+    },  [selectedOption]);
     
 
   return (
@@ -446,7 +461,12 @@ const NewOdm = ({idMission}) => {
                         {/* handleChangeFonction */}
                         {fonction && (<div className='md:flex-row w-full lg:w-1.5/3'>
                             <label htmlFor="fonctionp">Fonction du participant *</label>
-                            <input type="text" id='fonctionp' required {...register("fonctionparticipant", { required: "Ce champs est obligatoire" })} value={fonction[0].fonction} className='outline-none rounded-2xl text-input w-full' placeholder='Ex: Assistante administrative'/>
+                            <select id="fonctionp" className='outline-none rounded-2xl text-input w-full' required {...register("fonctionparticipant", { required: "Ce champs est obligatoire" })}>
+                                {fonction.map((item)=>(
+                                    <option key={item.Id_agent} value={item.Id_poste}>{item.Libelle_poste}</option>
+                                ))}
+                            </select>
+                            {/* <input type="text" id='fonctionp' required {...register("fonctionparticipant", { required: "Ce champs est obligatoire" })} value={fonction[0].fonction} className='outline-none rounded-2xl text-input w-full' placeholder='Ex: Assistante administrative'/> */}
                             {errors.fonctionparticipant && (<p className="text-red-500 text-sm">{errors.fonctionparticipant.message}</p>)}
                         </div>)}
                     </div>
@@ -532,7 +552,7 @@ const NewOdm = ({idMission}) => {
                             {errors.forfait && (<p className="text-red-500 text-sm">{errors.forfait.message}</p>)}
                         </div>
 
-                        <div className='flex flex-col md:flex-row gap-4 mt-4'>
+                        {/* <div className='flex flex-col md:flex-row gap-4 mt-4'>
                             <div className='w-full lg:w-1.5/3'>
                                 <label htmlFor="joursmission">Nombre de jours de la mission *</label>
                                 <input type="number" id='joursmission' {...register("joursmission", { required: "Ce champs est obligatoire" })} className='outline-none rounded-2xl text-input w-full'/>
@@ -544,7 +564,7 @@ const NewOdm = ({idMission}) => {
                                 <input type="number" id='jourshebergement' {...register("jourshebergement", { required: "Ce champs est obligatoire" })} className='outline-none rounded-2xl text-input w-full'/>
                                 {errors.jourshebergement && (<p className="text-red-500 text-sm">{errors.jourshebergement.message}</p>)}
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                 )}
 
