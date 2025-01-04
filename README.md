@@ -4,6 +4,8 @@ Ceci est un template de base pour commencer un espace Admin.
 
 ## Pour Commencer:
 
+### Technologies requises: Nextjs + TailwindCss
+
 ```bash
 npm install
 
