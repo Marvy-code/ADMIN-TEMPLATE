@@ -24,7 +24,7 @@ export default function RHLayout({
           {/* Left */}
           <div className="w-[14%] md:w-[8%] lg:w-[16%] xl:w-[14%] p-4 shadow-inner bg-gray-200">
             <Link href='/' className='flex items-center justify-center lg:justify-start gap-2'>
-              <Image src={'/assets/images/Logo_arpce.png'} alt='ARPCE' width={70} height={70} />
+              <Image src={'/assets/images/logo_mayombe.png'} alt='ARPCE' width={70} height={70} />
               <span className='hidden lg:block text-[15px] font-bold text-[#769C38]'>MAYOMBE - APP</span>
             </Link>
 

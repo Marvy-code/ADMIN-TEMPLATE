@@ -25,7 +25,7 @@ const Auth = () => {
         setError("");
 
         try{
-        const response = await fetch('https://bzv-test-appli:8000/api/home/signin', {
+        const response = await fetch('api-auth', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

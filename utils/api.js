@@ -5,7 +5,7 @@ export async function getUserFromApi(token) {
         return null;
       }
   
-      const response = await fetch("https://bzv-test-appli:8000/api/home/getcurrentuser", {
+      const response = await fetch("api-auth", {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
