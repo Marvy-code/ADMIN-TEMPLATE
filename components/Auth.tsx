@@ -46,13 +46,13 @@ const Auth = () => {
         if(response.ok){
             const data = await response.json();
             localStorage.setItem('token', data.token);
-            router.push('/missions');     
+            // router.push('/missions');     
         }
         else{
             setError('Nom d\'utilisateur ou mot de passe incorrect');
             setLoader(false)
         }}catch(err){
-            setError("Une erreur réseau est survenue. Veuillez vérifier vos identifiants et réessayer. Si l'erreur persiste, contactez le support IT au 1123");
+            setError("Une erreur inattendue est survenue, réessayez svp");
             setLoader(false)
         }
     
@@ -61,22 +61,22 @@ const Auth = () => {
   return (
     <div className='flex flex-col items-center justify-center min-h-screen py-2 bg-green-50'>
         <Head>
-            <title>AUTHENTIFICATION</title>
-            <link rel="icon" href="" />
+            <title>AUTHENTIFICATION - MAYOMBE</title>
+            <link rel="icon" href="/assets/images/logo_mayombe.png" />
         </Head>
 
         <main className='flex flex-col items-center justify-center w-full flex-1 sm:px-20 text-center'>
             <div className='bg-white rounded-2xl shadow-2xl flex w-2/3 max-w-4xl'>
                 <div className='w-3/5 p-5'>
                     <div className='text-left font-bold'>
-                        <span className='text-[#B2241B] hidden sm:block'>Agence de Régulation des Postes <span className='text-[#769C38]'>et des Communications Electroniques</span></span>
+                        <span className='text-[#B2241B] hidden sm:block uppercase'>Mayombe<span className='text-[#769C38]'> App</span></span>
                     </div>
 
                     <div className="py-10 ml-[7rem] sm:ml-[0rem]">
                         <div className='flex justify-center items-center'>
-                            <Image src={'/assets/images/Logo_arpce.png'} className='hidden sm:block' width={200} height={200} alt='Logo ARPCE'/>
+                            <Image src={'/assets/images/logo_mayombe.png'} className='hidden sm:block' width={100} height={100} alt='Logo ARPCE'/>
                         </div>
-                        <h2 className='text-sm sm:text-3xl font-bold text-[#769C38] mb-2 mt-4'>DIGI ODM</h2>
+                        <h2 className='text-sm sm:text-xl font-bold text-[#769C38] mb-2 mt-4'>MAYOMBE APP</h2>
                         <div className='border-2 w-10 border-[#769C38] inline-block mb-5'></div>
 
                         <form onSubmit={handleAuht}>
@@ -88,7 +88,7 @@ const Auth = () => {
 
                                 <div className="bg-gray-100 w-64 p-2 flex items-center">
                                     <MdLockOutline className='text-gray-400 mr-2'/> 
-                                    <input type="password" name='username' placeholder='Votre mot de passe ARPCE' className='bg-gray-100 outline-none text-sm flex-1' value={password} onChange={(e) => setPassword(e.target.value)} required/>
+                                    <input type="password" name='username' placeholder='Votre mot de passe' className='bg-gray-100 outline-none text-sm flex-1' value={password} onChange={(e) => setPassword(e.target.value)} required/>
                                 </div>
 
                                 {!loader && (<button type='submit' className='border-2 border-[#769C38] mt-5 text-[#769C38] rounded-full px-12 py-2 inline-block font-semibold hover:bg-[#769C38] hover:text-white'>
@@ -106,14 +106,12 @@ const Auth = () => {
                     </div>
                 </div>
                 <div className='w-2/5 bg-gradient-to-r from-[#769C38] to-[#B2241B] text-white rounded-tr-2xl rounded-br-2xl py-36 px-12 hidden sm:block'>
-                    <h2 className='text-3xl font-bold mb-2'>Bienvenu,</h2>
+                    <h2 className='text-2xl font-bold mb-2'>Bienvenu,</h2>
                     <div className='border-2 w-10 border-white inline-block m-2'></div>
-                    <p className='mb-2 text-[18px]'>
-                        <span className='font-bold'>DIGI ODM App</span> est une application de Gestion des Ordres de Missions à l'ARPCE. 
-                    </p>
+                    <p className='mb-2 text-[15px]'>Nous vous prions de vous connecter ...</p>
 
                     <div className="relative h-32  ...">
-                        <div className="absolute inset-x-0 bottom-0 h-16 font-bold uppercase">Digitaliser pour mieux Gérer</div>
+                        <div className="absolute inset-x-0 bottom-0 h-16 font-bold uppercase">Esace administrateur</div>
                     </div>
                 </div>
             </div>
